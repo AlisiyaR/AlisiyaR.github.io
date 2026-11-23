@@ -2,8 +2,8 @@
   const S = window.SITE;
   const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname); // באתר המפורסם פסקאות זמניות ב"עליי" מוסתרות
   const UI = {
-    he: { projects: "פרויקטים", about: "עליי", skills: "כישורים", exp: "ניסיון והשכלה", contact: "יצירת קשר", github: "GitHub", linkedin: "LinkedIn", cv: "קורות חיים", email: "אימייל", copy: "העתקת כתובת המייל", copied: "הועתק", manual: "הכתובת סומנה, העתיקו עם Ctrl+C", try: "לנסות את הדמו", view: "לעמוד הפרויקט", soon: "הדמו בהכנה", back: "לכל הפרויקטים", full: "פתיחה בחלון מלא", demo: "דמו", missing: "הפרויקט לא נמצא", add: "קישור יתווסף", light: "מצב בהיר", dark: "מצב כהה", other: "English", nav: "ניווט", menu: "תפריט" },
-    en: { projects: "Projects", about: "About", skills: "Skills", exp: "Experience and education", contact: "Contact", github: "GitHub", linkedin: "LinkedIn", cv: "CV", email: "Email", copy: "Copy email address", copied: "Copied", manual: "Address selected, copy with Ctrl+C", try: "Try the demo", view: "View project", soon: "Demo in progress", back: "All projects", full: "Open full page", demo: "Demo", missing: "Project not found", add: "Link coming", light: "Light mode", dark: "Dark mode", other: "עברית", nav: "Navigation", menu: "Menu" }
+    he: { projects: "פרויקטים", about: "עליי", how: "איך אני עובדת", skills: "כישורים", edu: "השכלה", exp: "ניסיון תעסוקתי", contact: "יצירת קשר", github: "GitHub", linkedin: "LinkedIn", cv: "קורות חיים", email: "אימייל", copy: "העתקת כתובת המייל", copied: "הועתק", manual: "הכתובת סומנה, העתיקו עם Ctrl+C", try: "לנסות את הדמו", view: "לעמוד הפרויקט", soon: "הדמו בהכנה", back: "לכל הפרויקטים", full: "פתיחה בחלון מלא", demo: "דמו", missing: "הפרויקט לא נמצא", add: "קישור יתווסף", light: "מצב בהיר", dark: "מצב כהה", other: "English", nav: "ניווט", menu: "תפריט" },
+    en: { projects: "Projects", about: "About", how: "How I work", skills: "Skills", edu: "Education", exp: "Work experience", contact: "Contact", github: "GitHub", linkedin: "LinkedIn", cv: "CV", email: "Email", copy: "Copy email address", copied: "Copied", manual: "Address selected, copy with Ctrl+C", try: "Try the demo", view: "View project", soon: "Demo in progress", back: "All projects", full: "Open full page", demo: "Demo", missing: "Project not found", add: "Link coming", light: "Light mode", dark: "Dark mode", other: "עברית", nav: "Navigation", menu: "Menu" }
   };
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch { return null; } },
@@ -145,6 +145,9 @@
   const section = (id, ...kids) =>
     h("section", { id, class: "wrap" }, h("h2", {}, UI[lang][id]), h("div", { class: "body" }, ...kids));
 
+  // רשימת תקופות: השכלה וניסיון
+  const timeline = (list = []) => h("dl", {}, list.flatMap(s => [h("dt", {}, h("bdi", {}, txt(s.when))), h("dd", {}, txt(s.what), s.note ? h("p", { class: "note" }, txt(s.note)) : null)]));
+
   function home() {
     const u = UI[lang];
     return h("main", {},
@@ -159,8 +162,10 @@
               github(p))));
       })),
       section("about", S.about[lang].filter(x => LOCAL || !x.startsWith("[")).map(x => h("p", {}, txt(x)))),
+      section("how", h("dl", {}, (S.how || []).flatMap(s => [h("dt", {}, tr(s.label)), h("dd", {}, txt(s.text))]))),
       section("skills", h("dl", {}, S.skills.flatMap(s => [h("dt", {}, tr(s.label)), h("dd", {}, txt(s.items))]))),
-      section("exp", h("dl", {}, S.experience.flatMap(s => [h("dt", {}, h("bdi", {}, txt(s.when))), h("dd", {}, txt(s.what), s.note ? h("p", { class: "note" }, txt(s.note)) : null)]))),
+      section("edu", timeline(S.education)),
+      section("exp", timeline(S.experience)),
       section("contact", links()));
   }
 

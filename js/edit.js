@@ -25,16 +25,20 @@
     pair(g, `projects.${p.id}.details`, "הסבר (שורה ריקה בין פסקאות)", p.details);
   }
   pair("עליי", "about", "טקסט (שורה ריקה בין פסקאות)", S.about);
+  S.how.forEach((s, i) => {
+    pair("איך אני עובדת", `how.${i}.label`, `נקודה ${i + 1}`, s.label);
+    pair("איך אני עובדת", `how.${i}.text`, `פירוט ${i + 1}`, s.text);
+  });
   S.skills.forEach((s, i) => {
     pair("כישורים", `skills.${i}.label`, `נושא ${i + 1}`, s.label);
     flat("כישורים", `skills.${i}.items`, `פירוט ${i + 1}`, s, "items");
   });
-  S.experience.forEach((s, i) => {
-    flat("ניסיון והשכלה", `experience.${i}.when`, `תקופה ${i + 1}`, s, "when");
-    pair("ניסיון והשכלה", `experience.${i}.what`, `תפקיד או לימודים ${i + 1}`, s.what);
-    if (s.note) pair("ניסיון והשכלה", `experience.${i}.note`, `פירוט ${i + 1}`, s.note);
+  for (const [k, g, what] of [["education", "השכלה", "לימודים"], ["experience", "ניסיון תעסוקתי", "תפקיד"]]) S[k].forEach((s, i) => {
+    flat(g, `${k}.${i}.when`, `תקופה ${i + 1}`, s, "when");
+    pair(g, `${k}.${i}.what`, `${what} ${i + 1}`, s.what);
+    if (s.note) pair(g, `${k}.${i}.note`, `פירוט ${i + 1}`, s.note);
   });
-  const NAMES = { projects: "כותרת: פרויקטים", about: "כותרת: עליי", skills: "כותרת: כישורים", exp: "כותרת: ניסיון", contact: "כותרת: יצירת קשר", cv: "כפתור: קורות חיים", try: "כפתור: דמו", back: "קישור: חזרה", full: "קישור: חלון מלא", demo: "כותרת: דמו" };
+  const NAMES = { projects: "כותרת: פרויקטים", about: "כותרת: עליי", how: "כותרת: איך אני עובדת", skills: "כותרת: כישורים", edu: "כותרת: השכלה", exp: "כותרת: ניסיון", contact: "כותרת: יצירת קשר", cv: "כפתור: קורות חיים", try: "כפתור: דמו", back: "קישור: חזרה", full: "קישור: חלון מלא", demo: "כותרת: דמו" };
   for (const k in NAMES) add("כותרות וכפתורים", `ui.${k}`, NAMES[k], () => ({ he: UI.he[k], en: UI.en[k] }), (l, v) => { UI[l][k] = v; });
 
   // שינויים שמורים. אם הטקסט בקובץ כבר התעדכן, השינוי הישן נזרק.

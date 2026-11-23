@@ -8,7 +8,7 @@ My portfolio site, in Hebrew and English, with a demo of each project that runs 
 
 | Project | What you can do in the demo | Source |
 |---|---|---|
-| [Heido: AI support inquiry triage](https://alisiyar.github.io/project.html?id=heido-code) | Send a ready-made customer email and watch it become a task on the support team's board | [Python](https://github.com/AlisiyaR/heido-ai-triage-code) · [No-code (Make.com)](https://github.com/AlisiyaR/heido-ai-triage-no-code) |
+| [Heido: AI support email triage](https://alisiyar.github.io/project.html?id=heido-code) | Send a ready-made customer email and watch it become a task on the support team's board | [Python](https://github.com/AlisiyaR/heido-ai-triage-code) · [No-code (Make.com)](https://github.com/AlisiyaR/heido-ai-triage-no-code) |
 | [SmartCare: systems analysis and Agile planning](https://alisiyar.github.io/project.html?id=smartcare) | Browse a view-only Scrum workspace with all 123 work items | [Repository](https://github.com/AlisiyaR/smartcare-systems-analysis) |
 | [Cybersecurity lab: Bash automation](https://alisiyar.github.io/project.html?id=cyber-lab) | Run three lab tools in a simulated terminal | [Repository](https://github.com/AlisiyaR/cybersecurity-lab-projects) |
 | [Worldwide Weather: Android app](https://alisiyar.github.io/project.html?id=weather) | Search for a city in a browser version of the app | [Repository](https://github.com/AlisiyaR/worldwide-weather-android) |

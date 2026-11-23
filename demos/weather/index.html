@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Worldwide Weather demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../css/style.css">
+<style>
+body{background:var(--panel);padding:1.25rem}
+#demo{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.5rem 3.5rem}
+#guide{flex:0 1 20rem}
+#guide p+p{margin-top:.75rem}
+#hint{color:var(--soft);font-size:.9rem}
+
+/* הטלפון: הצבעים של האפליקציה עצמה, לא של האתר */
+#phone{flex:none;position:relative;width:15.5rem;height:31rem;border:.45rem solid #2b2930;border-radius:1.75rem;overflow:hidden;background:#fef7ff;color:#49454f;font:400 .85rem/1.45 Roboto,system-ui,sans-serif;color-scheme:light}
+.screen{height:100%;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem 4rem}
+.screen[hidden]{display:none}
+.app{font-size:1.3rem;font-weight:700;line-height:1.2}
+.sub{font-size:1rem;font-weight:700;margin-top:2.25rem;line-height:1.2}
+form{width:100%;display:flex;flex-direction:column;align-items:center;margin-top:2rem}
+#city{width:100%;font:inherit;font-size:1rem;color:#1d1b20;background:none;border:0;border-bottom:1px solid #49454f;border-radius:0;padding:.4rem .3rem}
+#city::placeholder{color:#6f6a75;opacity:1}
+#phone button{width:75%;min-height:2.5rem;border-radius:2rem;background:#6750a4;color:#fff;font-size:.85rem;font-weight:500}
+#phone button:hover{filter:brightness(1.1)}
+#phone button:disabled{background:#e3dce4;color:#79747e;cursor:default;filter:none}
+#phone :focus-visible{outline-color:#6750a4}
+form button{margin-top:1rem}
+#result{width:100%;margin-top:1rem;overflow-wrap:anywhere}
+.bottom{margin-top:auto}
+#details{width:100%;padding-inline:.3rem;margin-top:1rem;white-space:pre-line}
+#name{overflow-wrap:anywhere}
+#toast{position:absolute;inset-inline:1rem;bottom:.9rem;text-align:center;background:#322f35;color:#f5eff7;border-radius:1.5rem;padding:.4rem .75rem;visibility:hidden}
+#toast.on{visibility:visible}
+</style>
+</head>
+<body>
+<div id="demo">
+  <div id="guide">
+    <p id="lead"></p>
+    <p id="hint"></p>
+  </div>
+  <div id="phone" dir="ltr" lang="en">
+    <div class="screen" id="first">
+      <p class="app">Worldwide Weather</p>
+      <form>
+        <input id="city" placeholder="Enter City" aria-label="Enter City" autocomplete="off" maxlength="60">
+        <button type="submit">Submit</button>
+      </form>
+      <p class="sub">Weather</p>
+      <p id="result" aria-live="polite"></p>
+      <button class="bottom" id="more" type="button" disabled>Show Detailed Weather</button>
+    </div>
+    <div class="screen" id="second" hidden>
+      <p class="app">Worldwide Weather</p>
+      <p class="sub" id="name" tabindex="-1"></p>
+      <p id="details" aria-live="polite"></p>
+      <button class="bottom" id="back" type="button">Back</button>
+    </div>
+    <div id="toast" role="status"></div>
+  </div>
+</div>
+<script>
+(() => {
+  let lang, theme;
+  try { lang = localStorage.getItem("lang"); theme = localStorage.getItem("theme"); } catch {}
+  const he = lang ? lang === "he" : /^(he|iw)/.test(navigator.language);
+  const root = document.documentElement, $ = id => document.getElementById(id);
+  root.lang = he ? "he" : "en";
+  root.dir = he ? "rtl" : "ltr";
+  root.dataset.theme = theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  $("lead").textContent = he
+    ? "הקלידו שם של עיר ולחצו על Submit. אחר כך אפשר ללחוץ על Show Detailed Weather."
+    : "Type the name of a city and press Submit. Then you can press Show Detailed Weather.";
+  const source = document.createElement("a");
+  source.href = "https://open-meteo.com/";
+  source.target = "_blank";
+  source.rel = "noopener";
+  source.textContent = "Open-Meteo";
+  $("hint").append(
+    he ? "זו הדמיה של האפליקציה בדפדפן. הנתונים אמיתיים ומגיעים מ-" : "This is a browser simulation of the app. The data is real and comes from ",
+    source,
+    he ? ", שלא דורש מפתח. האפליקציה עצמה משתמשת ב-OpenWeatherMap. שם העיר שתקלידו וכתובת ה-IP שלכם מגיעים ל-Open-Meteo; האתר הזה לא שומר אותם." : ", which needs no key. The app itself uses OpenWeatherMap. The city you type and your IP address reach Open-Meteo; this site does not store them.");
+
+  // קודי מזג האוויר של Open-Meteo (WMO)
+  const CODES = [
+    [[0], "Clear", "clear sky"], [[1], "Clear", "mainly clear"], [[2], "Clouds", "partly cloudy"], [[3], "Clouds", "overcast clouds"],
+    [[45, 48], "Fog", "fog"], [[51, 53, 55], "Drizzle", "drizzle"], [[56, 57], "Drizzle", "freezing drizzle"],
+    [[61], "Rain", "light rain"], [[63], "Rain", "moderate rain"], [[65], "Rain", "heavy rain"], [[66, 67], "Rain", "freezing rain"],
+    [[71], "Snow", "light snow"], [[73], "Snow", "moderate snow"], [[75], "Snow", "heavy snow"], [[77], "Snow", "snow grains"],
+    [[80, 81, 82], "Rain", "rain showers"], [[85, 86], "Snow", "snow showers"], [[95, 96, 99], "Thunderstorm", "thunderstorm"]
+  ];
+  async function getJson(url, params) {
+    const r = await fetch(url + "?" + new URLSearchParams(params), { signal: AbortSignal.timeout(10000) });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  }
+  // מחזיר null אם העיר לא קיימת, וזורק שגיאה אם הרשת נכשלה
+  async function fetchCity(city) {
+    const places = await getJson("https://geocoding-api.open-meteo.com/v1/search",
+      { name: city, count: 10, language: /[֐-׿]/.test(city) ? "he" : "en" });
+    const place = (places.results || []).find(x => (x.feature_code || "").startsWith("PPL"));
+    if (!place) return null;
+    const w = await getJson("https://api.open-meteo.com/v1/forecast", {
+      latitude: place.latitude, longitude: place.longitude, timezone: "auto", forecast_days: 1,
+      current: "temperature_2m,relative_humidity_2m,pressure_msl,cloud_cover,weather_code",
+      daily: "temperature_2m_min,temperature_2m_max"
+    });
+    const c = w.current, code = CODES.find(x => x[0].includes(c.weather_code));
+    return {
+      temp: c.temperature_2m, min: w.daily.temperature_2m_min[0], max: w.daily.temperature_2m_max[0],
+      humidity: c.relative_humidity_2m, pressure: Math.round(c.pressure_msl), clouds: c.cloud_cover,
+      text: code ? `${code[1]} (${code[2]})` : "Unknown"
+    };
+  }
+
+  let toastTimer, request = 0, shown = null;
+  function toast(text) {
+    clearTimeout(toastTimer);
+    $("toast").textContent = text;
+    $("toast").classList.add("on");
+    toastTimer = setTimeout(() => $("toast").classList.remove("on"), 2500);
+  }
+  // מצב התחלתי: אין תוצאה, והכפתור התחתון כבוי
+  function clear() {
+    request++;
+    shown = null;
+    $("result").textContent = "";
+    $("more").disabled = true;
+  }
+
+  async function submit() {
+    const city = $("city").value.trim();
+    clear();
+    if (!city) return toast("Please enter a valid city");
+    const id = request;
+    let data;
+    try { data = await fetchCity(city); } catch { data = undefined; }
+    if (id !== request) return;
+    if (data) {
+      shown = { city, data };
+      $("result").textContent = `Current temperature in ${city}: ${data.temp}°C`;
+      $("more").disabled = false;
+    } else if (data === null) {
+      $("result").textContent = "Error: City was not found";
+      toast("Please enter a valid city");
+    } else $("result").textContent = "Error: Could not load the weather";
+  }
+
+  document.querySelector("form").onsubmit = e => { e.preventDefault(); submit(); };
+  $("city").oninput = clear; // עיר חדשה דורשת Submit חדש
+  $("more").onclick = () => {
+    const { city, data: d } = shown;
+    $("toast").classList.remove("on");
+    $("first").hidden = true;
+    $("second").hidden = false;
+    $("name").textContent = city;
+    $("details").textContent = [
+      `Minimum Temperature: ${d.min}°C`, `Maximum Temperature: ${d.max}°C`, `Humidity: ${d.humidity}%`,
+      `Pressure: ${d.pressure} hPa`, `Cloudiness: ${d.clouds}%`, `Weather: ${d.text}`
+    ].join("\n\n");
+    $("name").focus({ preventScroll: true });
+  };
+  $("back").onclick = () => {
+    $("second").hidden = true;
+    $("first").hidden = false;
+    $("more").focus({ preventScroll: true });
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cybersecurity lab demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=IBM+Plex+Sans+Hebrew:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../css/style.css">
+<style>
+body{background:var(--panel);padding:1.25rem}
+#lead{margin-bottom:1rem}
+#tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
+#tools button{display:flex;flex-direction:column;gap:.25rem;text-align:start;padding:.8rem 1rem;background:var(--bg);color:var(--soft);border:1px solid var(--line)}
+#tools button:hover{border-color:var(--acc)}
+#tools button[aria-pressed=true]{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+#tools b{color:var(--ink);font-size:1.05rem;font-weight:600}
+#tools .star{color:var(--acc);font-weight:500}
+
+/* המסוף: צבעי Kali, לא צבעי האתר */
+#term{margin-top:1rem;height:30rem;overflow-y:auto;background:#23252e;color:#f2f2f2;border-radius:6px;padding:1rem;font:400 .85rem/1.45 "Fira Code",Consolas,monospace;color-scheme:dark;scrollbar-color:#5a5f70 #23252e}
+#term:focus-within{outline:2px solid var(--acc);outline-offset:2px}
+#out,#line{white-space:pre-wrap;overflow-wrap:anywhere;tab-size:8}
+#line{display:flex;flex-wrap:wrap;margin:0}
+#line[hidden]{display:none}
+#ask{white-space:pre-wrap}
+#in{flex:1;min-width:6rem;font:inherit;color:inherit;background:none;border:0;padding:0;outline:0;caret-color:#fff}
+.frame{color:#4fb0a0}
+.who{color:#4a90ff;font-weight:700}
+.path,.arg{color:#fff;font-weight:700}
+.sudo{color:#4fb0a0;text-decoration:underline}
+.cmd{color:#5aa2ff}
+#below{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;margin-top:.75rem}
+#note{flex:1 1 18rem;color:var(--soft);font-size:.9rem}
+#below button{border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+#below button:hover{border-color:var(--acc);color:var(--acc)}
+@media(max-width:44rem){
+  #tools{grid-template-columns:1fr}
+  #term{font-size:.75rem;padding:.75rem}
+}
+@media(pointer:coarse){#in{font-size:16px}}
+</style>
+</head>
+<body>
+<p id="lead"></p>
+<div id="tools" role="group"></div>
+<div id="term" dir="ltr" lang="en">
+  <div id="out" role="log" tabindex="0"></div>
+  <form id="line"><span id="ask"></span><input id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="200"></form>
+</div>
+<div id="below">
+  <p id="note"></p>
+  <button id="again" type="button"></button>
+  <button id="clear" type="button"></button>
+</div>
+<script src="network.js"></script>
+<script src="tools.js"></script>
+<script>
+(() => {
+  let lang, theme;
+  try { lang = localStorage.getItem("lang"); theme = localStorage.getItem("theme"); } catch {}
+  const he = lang ? lang === "he" : /^(he|iw)/.test(navigator.language);
+  const root = document.documentElement, $ = id => document.getElementById(id);
+  root.lang = he ? "he" : "en";
+  root.dir = he ? "rtl" : "ltr";
+  root.dataset.theme = theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const text = he ? {
+    lead: "בחרו כלי, והוא יתחיל לרוץ במסוף. כשמופיעה שאלה, הקלידו תשובה ולחצו על Enter.",
+    note: "הדמיה בלבד. לא נסרקת אף רשת, והנתונים פיקטיביים. ייתכנו טעויות או הבדלים לעומת הרצה אמיתית של הכלים.",
+    again: "הרצה מחדש", clear: "ניקוי המסך", tools: "בחירת כלי", input: "קלט למסוף", output: "פלט המסוף", star: "★ מומלץ להתחיל כאן",
+    checker: "הדמיית תקיפות ותיעוד ביומן", vulner: "סריקת רשת ומיפוי פגיעויות", ghostlogin: "בדיקת חשיפת SSH"
+  } : {
+    lead: "Choose a tool and it starts running in the terminal. When a question appears, type an answer and press Enter.",
+    note: "Simulation only. No network is scanned, and the data is fictional. It may contain errors or differ from a real run of the tools.",
+    again: "Run again", clear: "Clear screen", tools: "Choose a tool", input: "Terminal input", output: "Terminal output", star: "★ Recommended first",
+    checker: "Attack simulation and logging", vulner: "Network scanning and vulnerability mapping", ghostlogin: "SSH exposure assessment"
+  };
+  for (const k of ["lead", "note", "again", "clear"]) $(k).textContent = text[k];
+  $("tools").setAttribute("aria-label", text.tools);
+  $("in").setAttribute("aria-label", text.input);
+  $("out").setAttribute("aria-label", text.output);
+
+  const span = (cls, s) => Object.assign(document.createElement("span"), { className: cls, textContent: s });
+  const down = () => { $("term").scrollTop = $("term").scrollHeight; };
+  function print(...nodes) {
+    $("out").append(...nodes, "\n");
+    down();
+  }
+  // צביעה כמו ב-zsh של Kali
+  function colored(command) {
+    return command.split(/(\s+)/).map(w => w === "sudo" ? span("sudo", w)
+      : /^(bash|grep|tail|ls|clear)$/.test(w) ? span("cmd", w) : /\.(sh|log)$/.test(w) ? span("arg", w) : w);
+  }
+
+  let place = TOOLS.home.checker, tool = null, run = 0, pending = null;
+
+  // כל הרצה מקבלת מספר; הרצה שהוחלפה נעצרת בפעולה הבאה שלה
+  function terminal(id) {
+    const alive = () => { if (id !== run) throw "stopped"; };
+    return {
+      echo(...lines) { alive(); if (lines.length) print(lines.join("\n")); },
+      // קצר יותר מהזמן האמיתי
+      sleep: s => new Promise((ok, stop) => setTimeout(() => id === run ? ok() : stop("stopped"), s * 450)),
+      async read(question) {
+        alive();
+        const answer = await ask(id, [question]);
+        print(question + answer);
+        return answer.trim(); // כמו read של Bash
+      }
+    };
+  }
+  function ask(id, nodes) {
+    return new Promise((ok, stop) => {
+      $("ask").replaceChildren(...nodes);
+      $("in").value = "";
+      $("line").hidden = false;
+      pending = value => {
+        pending = null;
+        $("line").hidden = true;
+        id === run ? ok(value) : stop("stopped");
+      };
+      down();
+      if (tool) $("in").focus({ preventScroll: true });
+    });
+  }
+  const top1 = () => [span("frame", "┌──("), span("who", `${LAB.user}㉿${place.host}`), span("frame", ")-["), span("path", place.path), span("frame", "]")];
+  const top2 = () => [span("frame", "└─"), span("who", "$"), " "];
+
+  // שורת הפקודה. first = פקודה שמורצת מיד
+  async function shell(first) {
+    const id = ++run, t = terminal(id);
+    pending = null;
+    $("line").hidden = true;
+    try {
+      for (;;) {
+        print(...top1());
+        const command = first || (await ask(id, top2())).trim();
+        first = null;
+        print(...top2(), ...colored(command));
+        const list = TOOLS.commands(place);
+        if (command === "clear") $("out").replaceChildren();
+        else if (Object.hasOwn(list, command)) await list[command](t);
+        else if (command) t.echo("This is a simulation. Available commands:", ...Object.keys(list).map(c => "  " + c), "  clear");
+        if (command !== "clear") print("");
+      }
+    } catch (e) {
+      if (e !== "stopped") throw e;
+    }
+  }
+  function start(name) {
+    tool = name;
+    place = TOOLS.home[name];
+    for (const b of $("tools").children) b.setAttribute("aria-pressed", String(b.dataset.tool === name));
+    $("out").replaceChildren();
+    $("term").scrollIntoView?.({ block: "nearest" });
+    shell(TOOLS.start[name]);
+  }
+
+  for (const [name, title] of [["checker", "CHECKER"], ["vulner", "VULNER"], ["ghostlogin", "GhostLogin"]]) {
+    const b = Object.assign(document.createElement("button"), { type: "button", onclick: () => start(name) });
+    b.dataset.tool = name;
+    b.setAttribute("aria-pressed", "false");
+    b.append(Object.assign(document.createElement("b"), { textContent: title }), span("", text[name]));
+    if (name === "checker") b.append(span("star", text.star));
+    $("tools").append(b);
+  }
+  $("line").onsubmit = e => { e.preventDefault(); pending?.($("in").value); };
+  $("term").onclick = () => { if (!$("line").hidden && !String(getSelection())) $("in").focus({ preventScroll: true }); };
+  $("term").onkeydown = e => {
+    if (e.ctrlKey && e.key.toLowerCase() === "c" && !String(getSelection()) && $("in").selectionStart === $("in").selectionEnd) {
+      e.preventDefault();
+      print(...($("line").hidden ? [] : [...$("ask").childNodes].map(n => n.cloneNode(true))), "^C\n");
+      shell();
+    }
+  };
+  $("again").onclick = () => start(tool || "checker");
+  $("clear").onclick = () => { $("out").replaceChildren(); if (!$("line").hidden) $("in").focus({ preventScroll: true }); };
+  shell();
+})();
+</script>
+</body>
+</html>

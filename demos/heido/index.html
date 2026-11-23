@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heido demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=IBM+Plex+Sans+Hebrew:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<p id="lead"></p>
+<div class="win" id="customer">
+  <div class="wbar"><b id="cTitle"></b><span id="cSub"></span></div>
+  <div id="mail">
+    <div id="side">
+      <div id="folders"></div>
+      <ul id="list"></ul>
+    </div>
+    <div id="pane" tabindex="-1"></div>
+  </div>
+</div>
+<div id="flow"><b id="fTitle"></b><ol id="steps"></ol><p id="fOut" role="status"></p></div>
+<div class="win" id="team">
+  <div class="wbar"><b id="tTitle"></b><span id="tSub"></span></div>
+  <div id="board" dir="ltr" lang="en" tabindex="-1"></div>
+</div>
+<p id="note"></p>
+<dialog id="task" dir="ltr" lang="en" aria-labelledby="taskTitle"></dialog>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

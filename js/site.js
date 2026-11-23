@@ -2,8 +2,8 @@
   const S = window.SITE;
   const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname); // באתר המפורסם פסקאות זמניות ב"עליי" מוסתרות
   const UI = {
-    he: { projects: "פרויקטים", about: "עליי", skills: "כישורים", exp: "ניסיון והשכלה", contact: "יצירת קשר", github: "GitHub", linkedin: "LinkedIn", cv: "קורות חיים", email: "אימייל", copy: "העתקת כתובת המייל", copied: "הועתק", manual: "הכתובת סומנה, העתיקו עם Ctrl+C", try: "לנסות את הדמו", view: "לעמוד הפרויקט", soon: "הדמו בהכנה", back: "לכל הפרויקטים", full: "פתיחה בחלון מלא", demo: "דמו", missing: "הפרויקט לא נמצא", add: "קישור יתווסף", light: "מצב בהיר", dark: "מצב כהה", other: "English", nav: "ניווט" },
-    en: { projects: "Projects", about: "About", skills: "Skills", exp: "Experience and education", contact: "Contact", github: "GitHub", linkedin: "LinkedIn", cv: "CV", email: "Email", copy: "Copy email address", copied: "Copied", manual: "Address selected, copy with Ctrl+C", try: "Try the demo", view: "View project", soon: "Demo in progress", back: "All projects", full: "Open full page", demo: "Demo", missing: "Project not found", add: "Link coming", light: "Light mode", dark: "Dark mode", other: "עברית", nav: "Navigation" }
+    he: { projects: "פרויקטים", about: "עליי", skills: "כישורים", exp: "ניסיון והשכלה", contact: "יצירת קשר", github: "GitHub", linkedin: "LinkedIn", cv: "קורות חיים", email: "אימייל", copy: "העתקת כתובת המייל", copied: "הועתק", manual: "הכתובת סומנה, העתיקו עם Ctrl+C", try: "לנסות את הדמו", view: "לעמוד הפרויקט", soon: "הדמו בהכנה", back: "לכל הפרויקטים", full: "פתיחה בחלון מלא", demo: "דמו", missing: "הפרויקט לא נמצא", add: "קישור יתווסף", light: "מצב בהיר", dark: "מצב כהה", other: "English", nav: "ניווט", menu: "תפריט" },
+    en: { projects: "Projects", about: "About", skills: "Skills", exp: "Experience and education", contact: "Contact", github: "GitHub", linkedin: "LinkedIn", cv: "CV", email: "Email", copy: "Copy email address", copied: "Copied", manual: "Address selected, copy with Ctrl+C", try: "Try the demo", view: "View project", soon: "Demo in progress", back: "All projects", full: "Open full page", demo: "Demo", missing: "Project not found", add: "Link coming", light: "Light mode", dark: "Dark mode", other: "עברית", nav: "Navigation", menu: "Menu" }
   };
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch { return null; } },
@@ -30,21 +30,27 @@
     e.append(...kids.flat(Infinity).filter(x => x != null));
     return e;
   }
+  // אות יחס לא נפרדת מהמילה בסוף שורה ("ב-Python")
+  const glue = s => s.replace(/([א-ת])-(?=[A-Za-z0-9])/g, "$1-\u2060");
   // טקסט זמני "[...]" מקבל סימון
-  const txt = v => tr(v).startsWith("[") ? h("span", { class: "todo" }, plain(v)) : tr(v);
+  const txt = v => tr(v).startsWith("[") ? h("span", { class: "todo" }, glue(plain(v))) : glue(tr(v));
   const link = (label, href) => href
     ? h("a", { class: "btn", href, ...(/^https?:|\.pdf$/.test(href) ? { target: "_blank", rel: "noopener" } : {}) }, label)
     : h("span", { class: "btn off", title: UI[lang].add }, label);
   const ICONS = {
     copy: "M9 9h11v11H9zM5 15H4V4h11v1",
+    menu: "M4 7h16M4 12h16M4 17h16",
+    close: "M6 6l12 12M18 6L6 18",
+    dark: "M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z",
+    light: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4",
     link: "M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7",
     github: "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.1-1.2-.3-2.5-1-3.5.3-1.1.3-2.3 0-3.5 0 0-1 0-3 1.5-2.6-.5-5.4-.5-8 0C6 2 5 2 5 2c-.3 1.2-.3 2.4 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.4.5-.7 1.1-.8 1.7-.2.6-.2 1.2-.2 1.8v4M9 18c-4.5 2-5-2-7-2"
   };
-  function icon(name) {
+  function icon(name, cls) {
     const ns = "http://www.w3.org/2000/svg", svg = document.createElementNS(ns, "svg"), path = document.createElementNS(ns, "path");
     svg.setAttribute("viewBox", "0 0 24 24");
     svg.setAttribute("aria-hidden", "true");
-    svg.setAttribute("class", "icon");
+    svg.setAttribute("class", cls ? "icon " + cls : "icon");
     path.setAttribute("d", ICONS[name]);
     svg.append(path);
     return svg;
@@ -113,14 +119,28 @@
     return svg;
   }
 
+  // בטלפון הקישורים נפתחים מכפתור תפריט
+  function menu(open) {
+    const bar = document.querySelector(".top");
+    bar.classList.toggle("open", open);
+    bar.querySelector(".menu").setAttribute("aria-expanded", String(open));
+  }
+  const isOpen = () => document.querySelector(".top").classList.contains("open");
+  document.addEventListener("click", e => { if (isOpen() && !e.target.closest(".menu")) menu(false); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && isOpen()) { menu(false); document.querySelector(".menu").focus(); } });
+  addEventListener("blur", () => menu(false)); // מעבר אל תוך הדמו
+
   function header(home) {
-    const u = UI[lang], at = home ? "" : "index.html";
+    const u = UI[lang], at = home ? "" : "index.html", mode = theme === "dark" ? "light" : "dark";
+    // טקסט מלא במסך רחב, קיצור או סמל בטלפון
+    const tool = (full, short) => [h("span", { class: "long" }, full), h("span", { class: "short" }, short)];
     return h("header", { class: "top" },
       h("a", { class: "brand", href: "index.html" }, tr(S.name)),
+      h("button", { type: "button", class: "menu", "aria-label": u.menu, "aria-expanded": "false", onclick() { menu(!isOpen()); } }, icon("menu", "m"), icon("close", "x")),
       h("nav", { "aria-label": u.nav }, ["projects", "about", "contact"].map(k => h("a", { href: at + "#" + k }, u[k]))),
       h("div", { class: "tools" },
-        h("button", { type: "button", lang: lang === "he" ? "en" : "he", onclick() { lang = lang === "he" ? "en" : "he"; store.set("lang", lang); render(); } }, u.other),
-        h("button", { type: "button", onclick() { theme = theme === "dark" ? "light" : "dark"; store.set("theme", theme); render(); } }, theme === "dark" ? u.light : u.dark)));
+        h("button", { type: "button", lang: lang === "he" ? "en" : "he", "aria-label": u.other, onclick() { lang = lang === "he" ? "en" : "he"; store.set("lang", lang); render(); } }, tool(u.other, lang === "he" ? "EN" : "עב")),
+        h("button", { type: "button", "aria-label": u[mode], onclick() { theme = mode; store.set("theme", theme); render(); } }, tool(u[mode], icon(mode)))));
   }
   const section = (id, ...kids) =>
     h("section", { id, class: "wrap" }, h("h2", {}, UI[lang][id]), h("div", { class: "body" }, ...kids));
@@ -174,6 +194,7 @@
     root.lang = lang;
     root.dir = lang === "he" ? "rtl" : "ltr";
     root.dataset.theme = theme;
+    document.querySelector("meta[name=theme-color]")?.setAttribute("content", getComputedStyle(root).getPropertyValue("--acc").trim());
     const isProject = document.body.dataset.page === "project", p = isProject ? current() : null;
     document.getElementById("app").replaceChildren(header(!isProject), isProject ? project(p) : home());
     document.title = (p ? plain(p.title) + " | " : "") + tr(S.name);

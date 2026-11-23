@@ -98,10 +98,10 @@
     bar.append(
       h("input", { type: "search", placeholder: "Search", "aria-label": "Search work items", value: f.q, oninput: e => { f.q = e.target.value.trim(); draw(); } }),
       who("none", "Unassigned", icon("person")), who("me", ME, "AR"),
-      pick("Type", "type", (opts.types || TYPES).map(x => [x, x])), pick("Priority", "priority", PRIO.map(x => [x, x])),
+      h("div", { class: "fs" }, pick("Type", "type", (opts.types || TYPES).map(x => [x, x])), pick("Priority", "priority", PRIO.map(x => [x, x])),
       ...(opts.status ? [pick("Status", "status", STATUS.map(x => [x, x]))] : []),
       pick("Epic", "epic", epics.map(e => [e.key, e.summary])),
-      btn({ class: "clear", onclick: () => { f = { ...none }; render(); } }, "Clear"), ...extra);
+      btn({ class: "clear", onclick: () => { f = { ...none }; render(); } }, "Clear"), ...extra));
     return bar;
   }
   const empty = () => h("p", { class: "empty" }, "No work items match.");
@@ -331,6 +331,8 @@
     view.replaceChildren(...(bars[state.tab] ? [bars[state.tab]()] : []), body);
     if (state.tab === "Summary") summary();
     else refresh({ Board: board, Backlog: backlog, List: list, Timeline: timeline, Calendar: calendar }[state.tab]);
+    // בטלפון ציר הזמן נפתח באוקטובר, שבו מתחילה העבודה
+    if (state.tab === "Timeline" && matchMedia("(max-width:44rem)").matches) body.scrollLeft = body.querySelector(".g").clientWidth * pos("2026-10-01") / 100;
   }
   function go(tab) {
     state.tab = tab;

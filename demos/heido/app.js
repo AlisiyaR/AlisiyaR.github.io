@@ -11,7 +11,7 @@
     lead: "בחרו מייל מוכן ושלחו אותו כלקוח. כמה שניות אחר כך המשימה תופיע בלוח של צוות התמיכה.",
     cTitle: "מסך הלקוח", cSub: "תיבת המייל", tTitle: "מסך צוות התמיכה", tSub: "לוח העבודה של העובדים", fTitle: "מאחורי הקלעים",
     ready: "מוכנים לשליחה", inbox: "דואר נכנס", from: "מאת", to: "אל", subject: "נושא", send: "שליחה", sending: "נשלח...", sent: "נשלח",
-    noInbox: "אין עדיין תשובות. שלחו מייל כדי לקבל אישור.", got: "המייל נשלח, והתקבל אישור בדואר הנכנס.", on: "המייל נשלח.", wait: "מייל אחר נשלח כרגע.", see: "למשימה בלוח", read: "לאישור שהתקבל", translated: "תורגם מעברית",
+    noInbox: "אין עדיין תשובות. שלחו מייל כדי לקבל אישור.", got: "המייל נשלח, והתקבל אישור בדואר הנכנס.", on: "המייל נשלח.", wait: "מייל אחר נשלח כרגע.", see: "למשימה בלוח", read: "לאישור שהתקבל", back: "חזרה לרשימה", translated: "תורגם מעברית",
     steps: ["קריאת המייל", "נושא ותוכן בלבד ל-AI", "תשובת Gemini", "כלל קבוע בוחר עובד", "משימה בלוח", "אישור ללקוח"], idle: "שלחו מייל כדי לראות את השלבים.",
     kept: "כתובת השולח לא נשלחת ל-AI.", arrow: " ← ", added: "משימה חדשה בלוח: ", conf: "נשלח ללקוח מספר פנייה ",
     note: "הדמיה, ואינה מוצר של monday.com. Heido היא חברה בדויה, וכל השמות והכתובות בדויים. תשובות ה-AI הן הפלט ש-Gemini החזיר בבדיקות, והן לא מחושבות מחדש; שתיים מהן שגויות ונשארו כמו שהיו (System failure recurring issue ו-Customer Callback Request). שום מייל לא נשלח באמת, והלוח מתאפס ברענון."
@@ -19,7 +19,7 @@
     lead: "Choose a ready-made email and send it as a customer. A few seconds later the task appears on the support team's board.",
     cTitle: "Customer screen", cSub: "Mailbox", tTitle: "Support team screen", tSub: "The employees' work board", fTitle: "Behind the scenes",
     ready: "Ready to send", inbox: "Inbox", from: "From", to: "To", subject: "Subject", send: "Send", sending: "Sending...", sent: "Sent",
-    noInbox: "No replies yet. Send an email to get a confirmation.", got: "The email was sent, and a confirmation arrived in the inbox.", on: "The email was sent.", wait: "Another email is being sent.", see: "See the task", read: "Read the confirmation", translated: "Translated from Hebrew",
+    noInbox: "No replies yet. Send an email to get a confirmation.", got: "The email was sent, and a confirmation arrived in the inbox.", on: "The email was sent.", wait: "Another email is being sent.", see: "See the task", read: "Read the confirmation", back: "Back to list", translated: "Translated from Hebrew",
     steps: ["Read the email", "Only subject and body to the AI", "Gemini's answer", "A fixed rule picks the employee", "Task on the board", "Confirm to the customer"], idle: "Send an email to see the steps.",
     kept: "The sender's address is not sent to the AI.", arrow: " → ", added: "New task on the board: ", conf: "The customer received ticket number ",
     note: "Simulation, not a monday.com product. Heido is a fictional company, and all names and addresses are fictional. The AI answers are what Gemini returned in testing and are not recomputed; two of them are wrong and were kept as they were (System failure recurring issue and Customer Callback Request). No email is really sent, and the board resets on refresh."
@@ -44,39 +44,43 @@
 
   /* ---------- מסך הלקוח ---------- */
   const tasks = H.board.map(t => ({ ...t })), status = {}; // status[id]: "sending" | "task" | "done"
-  let folder = "ready", mail = H.emails[0], reply = null, busy = false, inbox = [];
+  let reading = false, folder = "ready", mail = H.emails[0], reply = null, busy = false, inbox = [];
 
   function drawList() {
     const top = $("list").scrollTop, own = folder === "ready" ? H.emails : inbox, cur = folder === "ready" ? mail : reply;
     $("folders").replaceChildren(...[["ready", `${T.ready} (${H.emails.filter(e => !status[e.id]).length})`], ["inbox", `${T.inbox} (${inbox.length})`]].map(([k, label]) =>
       btn({ "aria-pressed": String(folder === k), "data-f": k, onclick: () => { open(k); $("folders").querySelector(`[data-f=${k}]`).focus(); } }, label)));
-    $("list").replaceChildren(...(own.length ? own.map(e => h("li", {}, btn({ "aria-current": String(e === cur), "data-id": e.id, onclick: () => { folder === "ready" ? mail = e : reply = e; draw(); $("list").querySelector(`[data-id=${e.id}]`).focus({ preventScroll: true }); } },
+    $("list").replaceChildren(...(own.length ? own.map(e => h("li", {}, btn({ "aria-current": String(e === cur), "data-id": e.id, onclick: () => { folder === "ready" ? mail = e : reply = e; reading = true; draw(); $("pane").scrollTop = 0; (narrow.matches ? $("pane") : $("list").querySelector(`[data-id=${e.id}]`)).focus({ preventScroll: true }); } },
       h("b", {}, folder === "ready" ? en(e.name) : en("Heido Support")), folder === "ready" && status[e.id] ? h("span", { class: "sent" }, "✓ " + T.sent) : "",
       h("span", { class: "subj", dir: "ltr" }, folder === "ready" ? e.subject : `We received your request – Ticket ${e.item}`)))) : [h("li", { class: "none" }, T.noInbox)]));
     $("list").scrollTop = top;
   }
+  // בטלפון רואים או את הרשימה או את המייל
+  const narrow = matchMedia("(max-width:44rem)");
+  const back = () => btn({ class: "back", onclick: () => { reading = false; draw(); $("list").querySelector("[aria-current=true]")?.focus({ preventScroll: true }); } }, T.back);
   const head = rows => h("div", { class: "hd" }, rows.map(([a, b]) => [h("span", {}, a), en(b)]));
   function drawPane() {
     const pane = $("pane");
     if (folder === "inbox") {
       if (!reply) return pane.replaceChildren(h("p", { class: "tr" }, T.noInbox));
-      return pane.replaceChildren(h("div", { dir: "ltr", lang: "en", class: "subject" }, `We received your request – Ticket ${reply.item}`), head([[T.from, "Heido Support"], [T.to, `${reply.name} (${reply.email})`]]),
+      return pane.replaceChildren(back(), h("div", { class: "mbody" }, h("div", { dir: "ltr", lang: "en", class: "subject" }, `We received your request – Ticket ${reply.item}`), head([[T.from, "Heido Support"], [T.to, `${reply.name} (${reply.email})`]]),
         h("div", { class: "text", dir: "ltr", lang: "en" }, "Hi,\n\nThank you for contacting ", h("strong", {}, "Heido Support"), ".\n\nWe have received your request and opened a support ticket:\n\n", h("strong", {}, "Ticket number: "), reply.item + "\n", h("strong", {}, "Topic: "), reply.title,
-          "\n\nOur team is reviewing your request and will get back to you as soon as possible.\nPlease keep this ticket number for future reference.\n\nBest regards,\nHeido Support Team"));
+          "\n\nOur team is reviewing your request and will get back to you as soon as possible.\nPlease keep this ticket number for future reference.\n\nBest regards,\nHeido Support Team")));
     }
     const s = status[mail.id];
     const act = !s ? [btn({ class: "btn main", disabled: busy ? "" : null, onclick: () => send(mail) }, T.send), busy ? h("p", {}, T.wait) : null]
       : s === "sending" ? [btn({ class: "btn main", disabled: "" }, T.sending)]
-      : [h("p", {}, s === "done" ? T.got : T.on), btn({ class: "btn", onclick: () => seeTask(mail.id) }, T.see), s === "done" ? btn({ class: "btn", onclick: () => { reply = inbox.find(x => x.id === mail.id); open("inbox"); pane.focus({ preventScroll: true }); } }, T.read) : null];
-    pane.replaceChildren(h("div", { class: "subject", dir: "ltr", lang: "en" }, mail.subject), head([[T.from, `${mail.name} (${mail.email})`], [T.to, "Heido Support"]]),
-      h("div", { class: "text", dir: "ltr", lang: "en" }, mail.body), mail.translated ? h("p", { class: "tr" }, T.translated) : "", h("div", { class: "act" }, act.filter(Boolean)));
+      : [h("p", {}, s === "done" ? T.got : T.on), btn({ class: "btn", onclick: () => seeTask(mail.id) }, T.see), s === "done" ? btn({ class: "btn", onclick: () => { reply = inbox.find(x => x.id === mail.id); open("inbox"); reading = true; draw(); pane.scrollTop = 0; if (narrow.matches) $("customer").scrollIntoView(); pane.focus({ preventScroll: true }); } }, T.read) : null];
+    pane.replaceChildren(back(), h("div", { class: "mbody" }, h("div", { class: "subject", dir: "ltr", lang: "en" }, mail.subject), head([[T.from, `${mail.name} (${mail.email})`], [T.to, "Heido Support"]]),
+      h("div", { class: "text", dir: "ltr", lang: "en" }, mail.body), mail.translated ? h("p", { class: "tr" }, T.translated) : ""), h("div", { class: "act" }, act.filter(Boolean)));
   }
   function open(f) {
     folder = f;
+    reading = false;
     if (f === "inbox" && !reply) reply = inbox[0] || null;
     draw();
   }
-  function draw() { drawList(); drawPane(); }
+  function draw() { $("mail").classList.toggle("reading", reading); drawList(); drawPane(); }
 
   /* ---------- מאחורי הקלעים ---------- */
   function flow(n, ...out) {
@@ -90,6 +94,7 @@
     draw();
     $("pane").focus({ preventScroll: true });
     flow(1, en(e.subject));
+    if (narrow.matches) $("flow").scrollIntoView({ block: "nearest" });
     await wait(900);
     flow(2, T.kept);
     await wait(1200);
@@ -118,13 +123,13 @@
   const STA = { "Working on it": ["#fdab3d", DARK], Stuck: ["#ff7544", DARK], Done: ["#33c573", DARK], "Not Started": ["#c4c4c4", DARK] };
   const CAT = { "Software & System Issues": ["#225091", WHITE], "Performance Issues": ["#2169d4", WHITE], "Network & Connectivity Issues": ["#cd9282", DARK], "Hardware Issues": ["#bca58a", DARK],
     "Service Requests & General Support": ["#faa1f1", DARK], "Installation & Configuration": ["#7f5347", WHITE], "Data & Information Issues": ["#ff5ac4", DARK], "Other / Unclassified": ["#bda8f9", DARK], "Login & Access Issues": ["#c4c4c4", DARK] };
-  const COLS = [["Task", 16], ["Item ID", 7.5], ["Priority", 8.5], ["Status", 9.5], ["Assigned to", 10], ["Category", 10.5], ["Summary", 11], ["Customer Name", 9.5], ["Customer Email", 12], ["Received At", 10], ["Files", 5.5], ["Original Message", 13]];
+  const COLS = [["Task", 16], ["Item ID", 7.5], ["Priority", 8.5], ["Status", 9.5], ["Assigned to", 10], ["Category", 10.5], ["Summary", 11], ["Customer Name", 9.5], ["Customer Email", 15], ["Received At", 10], ["Files", 5.5], ["Original Message", 13]];
   const fill = (map, v) => h("td", { class: "fill", title: v, style: `background:${map[v][0]};color:${map[v][1]}` }, v);
   const closed = new Set();
   const line = t => h("tr", { "data-task": t.id },
     h("td", {}, btn({ title: t.title, onclick: () => show(t) }, t.title)), h("td", { class: "l", title: t.item }, t.item), fill(PRI, t.priority), fill(STA, t.status),
     h("td", {}, h("span", { class: "chip" }, assign(t.category))), fill(CAT, t.category), h("td", { class: "l", title: t.summary }, t.summary), h("td", {}, t.name),
-    h("td", { class: "mail", title: t.email }, t.email), h("td", { class: "sub" }, received(t.at)), h("td", {}), h("td", { class: "l" }, t.body.replace(/\s+/g, " ")));
+    h("td", { class: "addr", title: t.email }, t.email), h("td", { class: "sub" }, received(t.at)), h("td", {}), h("td", { class: "l" }, t.body.replace(/\s+/g, " ")));
   function dist(list, map, key) {
     const counts = Object.keys(map).map(k => [k, list.filter(t => t[key] === k).length]).filter(x => x[1]);
     return h("td", {}, h("div", { class: "dist", role: "img", "aria-label": counts.map(([k, n]) => `${k}: ${n}`).join(", "), title: counts.map(([k, n]) => `${k}: ${n}`).join(", ") },

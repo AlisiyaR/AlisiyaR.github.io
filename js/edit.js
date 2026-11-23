@@ -81,6 +81,7 @@
     textarea.mod{border-color:#505d94;background:#f1f3fb}
     .row{display:flex;flex-wrap:wrap;gap:.4rem;position:sticky;bottom:-1rem;background:#fff;padding:.7rem 0 1rem;margin-bottom:-1rem;border-top:1px solid #ddd}
     #out{direction:ltr;height:7rem;font:12px monospace;margin-bottom:.6rem}
+    @media(max-width:30rem){:host{display:none}}
   </style>
   <div id="panel" hidden>
     <p>לחצו על טקסט באתר כדי לקפוץ לשדה שלו, או בחרו מהרשימה. טקסט שמתחיל ב-[ מסומן כזמני; מחקו את הסוגריים כשהוא סופי.</p>
@@ -138,7 +139,7 @@
     if ($("panel").hidden) return;
     const el = e.target.closest("h1,h2,h3,p,dt,dd,.todo,.btn,.back,.brand");
     if (!el || e.target.closest(".tools")) return;
-    const clean = s => s.replace(/^\[|\]$/g, "").trim(), text = el.matches("dd") ? clean(el.firstChild?.textContent || "") : clean(el.textContent), l = document.documentElement.lang;
+    const clean = s => s.replace(/^\[|\]$|\u2060/g, "").trim(), text = el.matches("dd") ? clean(el.firstChild?.textContent || "") : clean(el.textContent), l = document.documentElement.lang;
     const f = fields.find(x => unpack(x.value[l], true).some(v => clean(v) === text));
     if (!f) return;
     e.preventDefault();

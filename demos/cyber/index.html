@@ -29,13 +29,24 @@ body{background:var(--panel);padding:1.25rem}
 .path,.arg{color:#fff;font-weight:700}
 .sudo{color:#4fb0a0;text-decoration:underline}
 .cmd{color:#5aa2ff}
+.rule{display:inline-block;max-width:100%;overflow:hidden;white-space:pre;vertical-align:bottom}
 #below{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;margin-top:.75rem}
 #note{flex:1 1 18rem;color:var(--soft);font-size:.9rem}
 #below button{border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 #below button:hover{border-color:var(--acc);color:var(--acc)}
 @media(max-width:44rem){
-  #tools{grid-template-columns:1fr}
-  #term{font-size:.75rem;padding:.75rem}
+  body{padding:1rem}
+  #lead,#note{line-height:1.5}
+  #lead{font-size:1rem}
+  #tools{grid-template-columns:1fr;gap:.5rem}
+  #tools button{display:grid;grid-template-columns:1fr auto;gap:.1rem .75rem;padding:.65rem .9rem}
+  #tools span{grid-row:2;grid-column:1/-1}
+  #tools .star{grid-area:1/2;font-size:.85rem}
+  #term:focus-within{outline-offset:-2px}
+  #term{height:27rem;margin:1rem -1rem 0;font-size:.7rem;padding:.9rem 1rem;border-radius:0}
+  #below{gap:.75rem}
+  #note{flex-basis:100%;font-size:.85rem}
+  #below button{flex:1;min-height:2.75rem;border-radius:99rem;font-weight:500}
 }
 @media(pointer:coarse){#in{font-size:16px}}
 </style>
@@ -81,6 +92,8 @@ body{background:var(--panel);padding:1.25rem}
 
   const span = (cls, s) => Object.assign(document.createElement("span"), { className: cls, textContent: s });
   const down = () => { $("term").scrollTop = $("term").scrollHeight; };
+  // קו הפרדה ארוך נחתך ברוחב המסך במקום לרדת שורה
+  const rules = s => s.split(/(-{39,})/).map(x => /^-{39}/.test(x) ? span("rule", x) : x);
   function print(...nodes) {
     $("out").append(...nodes, "\n");
     down();
@@ -97,7 +110,7 @@ body{background:var(--panel);padding:1.25rem}
   function terminal(id) {
     const alive = () => { if (id !== run) throw "stopped"; };
     return {
-      echo(...lines) { alive(); if (lines.length) print(lines.join("\n")); },
+      echo(...lines) { alive(); if (lines.length) print(...rules(lines.join("\n"))); },
       // קצר יותר מהזמן האמיתי
       sleep: s => new Promise((ok, stop) => setTimeout(() => id === run ? ok() : stop("stopped"), s * 450)),
       async read(question) {
@@ -151,7 +164,7 @@ body{background:var(--panel);padding:1.25rem}
     place = TOOLS.home[name];
     for (const b of $("tools").children) b.setAttribute("aria-pressed", String(b.dataset.tool === name));
     $("out").replaceChildren();
-    $("term").scrollIntoView?.({ block: "nearest" });
+    $("term").scrollIntoView?.({ block: matchMedia("(max-width:44rem)").matches ? "start" : "nearest" });
     shell(TOOLS.start[name]);
   }
 

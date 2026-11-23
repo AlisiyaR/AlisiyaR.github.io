@@ -59,6 +59,7 @@
     #warn{color:#9a2a12;margin-top:.6rem;white-space:pre-line}
     #warn:empty{display:none}
     textarea{width:100%;box-sizing:border-box;height:5rem;margin-top:.6rem;direction:ltr;font:12px monospace}
+    @media(max-width:30rem){:host{display:none}}
   </style>
   <div id="panel" hidden>
     <p id="mode"></p><div id="fields"></div><p id="warn" role="status"></p>

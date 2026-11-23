@@ -18,6 +18,7 @@ h1,h2,h3{line-height:1.15;text-wrap:balance;font-weight:600}
 .top button:hover{background:none;color:inherit;text-decoration:underline;text-underline-offset:.25em}
 .top :focus-visible{outline-color:currentColor}
 .tools{display:flex;gap:.25rem}
+.top .menu,.top .short{display:none}
 button{font:inherit;font-size:.9rem;color:var(--soft);background:none;border:0;padding:.5rem .6rem;border-radius:4px;cursor:pointer}
 button:hover{background:var(--panel);color:var(--ink)}
 
@@ -75,24 +76,80 @@ iframe{display:block}
 .detailtext{margin-top:2.5rem}
 .detailtext>*+*{margin-top:1rem}
 
-@media(max-width:44rem){
-  section{padding-block:1.5rem 2rem}
-  .project{flex-direction:column;align-items:stretch;gap:1.25rem}
-  .art{width:100%}
-  section>h2{font-size:1.5rem;margin-bottom:1.5rem}
-  html{scroll-padding-top:7.5rem}
-  .top{gap:0 1rem;padding-block:.5rem}
-  .top nav{order:3;width:100%}
-  .tools{margin-inline-start:auto}
-  dl{grid-template-columns:1fr;gap:.25rem}
-  dd{margin-bottom:.75rem}
-}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 .note{color:var(--soft)}
 .shots{display:grid;grid-template-columns:repeat(3,minmax(0,14rem));gap:1.5rem;margin-top:2.5rem}
 .shots figure{margin:0}
 .shots img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:6px}
 figcaption{color:var(--soft);font-size:.9rem;margin-top:.5rem}
-@media(max-width:44rem){.shots{gap:.75rem}}
 .shots.wide{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
-@media(max-width:44rem){.shots.wide{grid-template-columns:minmax(0,1fr);gap:1.25rem}}
+
+/* ---------- מובייל ---------- */
+@media(max-width:44rem){
+  html{scroll-padding-top:4.5rem;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  a,button{-webkit-tap-highlight-color:transparent}
+
+  /* כותרת בשורה אחת, והקישורים בתפריט */
+  .top{flex-wrap:nowrap;gap:0;padding:0 1.25rem;min-height:3.5rem}
+  .brand{display:flex;align-items:center;min-height:2.75rem;margin-inline-end:auto;white-space:nowrap}
+  .tools{gap:0}
+  .top .long{display:none}
+  .top .short{display:grid}
+  .top button{display:grid;place-content:center;min-width:2.75rem;min-height:2.75rem;padding:0;font-weight:500}
+  .top button:hover{text-decoration:none}
+  .top .icon{width:1.3rem;height:1.3rem}
+  .top .menu{display:grid;order:3;margin-inline-end:-.75rem}
+  .top .menu .x,.top.open .menu .m{display:none}
+  .top.open .menu .x{display:block}
+  .top nav{display:none;position:absolute;inset:100% 0 auto;margin:0;padding:.25rem 1.25rem .75rem;background:var(--acc);border-top:1px solid color-mix(in srgb,var(--on) 22%,transparent);box-shadow:0 12px 20px -8px #0005}
+  .top.open nav{display:block}
+  .top nav a{display:flex;align-items:center;min-height:3rem;font-weight:500}
+  .top nav a+a{border-top:1px solid color-mix(in srgb,var(--on) 16%,transparent)}
+
+  /* דף הבית */
+  .hero{padding-block:2.75rem 1.5rem}
+  .hero h1{font-size:clamp(2rem,10.4vw,3.2rem)}
+  .lead{margin-top:.75rem}
+  .intro{margin-block:.75rem 1.5rem}
+  .links .btn{flex:1 1 auto;justify-content:center;min-height:2.875rem;padding-inline:clamp(.6rem,3.4vw,1rem)}
+  .links{gap:.5rem}
+  .links .mail{flex:1 1 100%;gap:0}
+  .copied:not(:empty){flex:1 1 100%;margin-top:.4rem;text-align:center}
+  section{padding-block:1.75rem}
+  section>h2{font-size:1.5rem;padding-bottom:.65rem;margin-bottom:1.5rem}
+  .project{flex-direction:column;align-items:stretch;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .project+.project{margin-top:1.25rem;padding-top:0}
+  .project>div{padding:1.15rem 1.15rem 1.25rem}
+  .project .links{margin-top:1.25rem}
+  .art{width:100%;aspect-ratio:2/1;max-height:14rem;padding:.75rem;border-radius:0}
+  h3{font-size:1.3rem}
+  .tags{gap:.4rem}
+  .tags li{font-size:.85rem;padding:.25rem .75rem}
+
+  /* עמוד פרויקט: הדמו והגלריה מקצה לקצה */
+  .detail{padding-block:.5rem 3rem}
+  .back{display:inline-flex;align-items:center;gap:.5rem;min-height:2.75rem;color:var(--soft);text-decoration:none}
+  .back::before{content:"←" / ""}
+  [dir=rtl] .back::before{content:"→" / ""}
+  .detail h1{font-size:clamp(1.7rem,7.6vw,2.2rem);margin-top:.35rem}
+  .detail .lead{font-size:1.1rem;line-height:1.5;color:var(--soft)}
+  .demohead{align-items:center;margin-block:1.5rem .35rem}
+  .demohead a{display:flex;align-items:center;min-height:2.75rem;font-size:.95rem}
+  .detail>iframe{width:calc(100% + 2.5rem);margin-inline:-1.25rem;border-inline:0;border-radius:0}
+  .shots,.shots.wide{display:flex;align-items:flex-start;gap:.9rem;margin:2rem -1.25rem 0;padding-inline:1.25rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:1.25rem;scrollbar-width:none}
+  .shots::-webkit-scrollbar{display:none}
+  .shots figure{flex:0 0 min(62%,15rem);scroll-snap-align:start}
+  .shots.wide figure{flex-basis:min(86%,28rem)}
+  .detailtext{margin-top:2rem}
+  .detailtext .links{margin-top:1.25rem}
+
+  /* כישורים וניסיון (והרשימות שבדמואים) */
+  dl{grid-template-columns:1fr;gap:.25rem}
+  dd{margin-bottom:.75rem}
+  .body>dl{display:block}
+  .body>dl dt{font-size:.9rem;font-weight:500;line-height:1.4;color:var(--acc)}
+  .body>dl dd{margin:.2rem 0 0;line-height:1.55}
+  .body>dl dt:not(:first-child){margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)}
+  #contact{padding-bottom:3.5rem}
+}
+@media(max-width:22rem){.links{gap:.4rem}.links .btn{font-size:.95rem;padding-inline:.5rem}}

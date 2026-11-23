@@ -5,6 +5,8 @@ body{background:var(--panel);padding:1.25rem}
 .wbar{display:flex;flex-wrap:wrap;align-items:baseline;gap:.1rem .8rem;padding:.6rem 1rem;background:var(--line);color:var(--ink)}
 .wbar b{font-weight:600}
 .wbar span{font-size:.9rem}
+#pane .back{display:none}
+.mbody{display:contents}
 
 /* מסך הלקוח */
 #mail{display:grid;grid-template-columns:17rem minmax(0,1fr);height:30rem}
@@ -54,7 +56,7 @@ button.btn.main:hover{color:var(--on);background:var(--acc);filter:brightness(1.
 .gh small{color:var(--t2);font-size:.85rem;font-weight:400}
 .gh i{font-style:normal;transition:transform .15s}
 .gh[aria-expanded=false] i{transform:rotate(-90deg)}
-#board table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:123rem;margin-bottom:1.75rem}
+#board table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:126rem;margin-bottom:1.75rem}
 #board th,#board td{height:2.25rem;padding:0 .6rem;border-bottom:1px solid var(--b);border-right:1px solid var(--b);font-weight:400;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:var(--w)}
 #board thead th{border-top:1px solid var(--b)}
 #board tr>:first-child{position:sticky;left:-1.25rem;z-index:1;text-align:left;border-left:6px solid var(--new)}
@@ -65,7 +67,7 @@ button.btn.main:hover{color:var(--on);background:var(--acc);filter:brightness(1.
 #board td button{color:inherit;font:inherit;padding:0;width:100%;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:none;border-radius:2px}
 #board td button:hover{text-decoration:underline}
 #board :focus-visible,#task :focus-visible{outline-color:var(--link);outline-offset:-2px}
-#board td.mail{color:var(--link);text-align:left}
+#board td.addr{color:var(--link);text-align:left}
 #board td.sub{color:var(--t2)}
 .chip{display:inline-block;background:var(--chip);color:var(--chipT);border-radius:4px;padding:.1rem .6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 #board tr.fresh td:not(.fill){animation:fresh 4s}
@@ -89,16 +91,40 @@ button.btn.main:hover{color:var(--on);background:var(--acc);filter:brightness(1.
 .lab{display:inline-block;border-radius:3px;padding:0 .6rem}
 
 @media(max-width:44rem){
-  body{padding:.75rem}
-  #mail{grid-template-columns:minmax(0,1fr);grid-template-rows:13rem minmax(0,1fr);height:38rem}
-  #side{border-inline-end:0;border-bottom:1px solid var(--line)}
-  #pane{padding:1rem}
-  .act{bottom:-1rem;margin:0 -1rem -1rem;padding:.8rem 1rem}
-  #steps{grid-template-columns:repeat(3,minmax(0,1fr))}
-  #fOut{min-height:4.95em}
+  body{padding:1rem}
+  #lead{font-size:1rem;line-height:1.5}
+  /* רשימה, ואחרי לחיצה המייל עצמו */
+  #mail{display:block;height:32rem}
+  #side,#pane{height:100%}
+  #side{border:0}
+  #mail:not(.reading) #pane,#mail.reading #side{display:none}
+  #folders button{min-height:2.75rem}
+  #list button{padding:.65rem 1rem}
+  #list button[aria-current=true]{background:none}
+  #pane{display:flex;flex-direction:column;padding:0;overflow:hidden}
+  #pane .back{display:flex;flex:none;font-size:.95rem;padding:0 1rem;border-radius:0;border-bottom:1px solid var(--line)}
+  #pane .back:hover{background:none}
+  .mbody{display:block;flex:1;min-height:0;overflow-y:auto;padding:.9rem 1rem 0}
+  #pane>.tr{padding:1rem}
+  .text{margin-bottom:1.25rem}
+  .act{position:static;flex:none;margin:0;padding:.8rem 1rem}
+  .act p{flex:1 1 100%}
+  .act .btn{flex:1 1 auto;justify-content:center;min-height:2.875rem}
+  .tr{margin-bottom:1rem}
+  #flow{padding:1.25rem 0}
+  #steps{grid-template-columns:minmax(0,1fr);gap:0;margin-top:.6rem}
+  #steps li{border-top:0;border-inline-start:3px solid var(--line);padding:.35rem .9rem;font-size:.95rem}
+  #fOut{margin-top:.75rem;min-height:3.3em}
   #board{height:32rem}
-  #board tr>:first-child{max-width:9rem}
-  #board col:first-child{width:9.5rem}
+  /* עמודת Task נגללת עם שאר הטבלה, אחרת היא מכסה את רוב המסך */
+  #board tr>:first-child{position:static}
+  #board table{width:122rem}
+  #board col:first-child{width:12rem!important}
+  #board td:first-child button{white-space:normal;line-height:1.25}
+  #board .gh,#board td button{min-height:2.75rem}
+  #board td,#board th{height:2.75rem}
+  #task{padding:1rem 1.15rem 1.5rem}
+  #task .x{min-width:2.75rem;min-height:2.75rem;margin:-.6rem -.6rem 0 0}
   #task dl{grid-template-columns:minmax(0,1fr);gap:.1rem}
   #task dd{margin-bottom:.5rem}
 }

@@ -33,6 +33,15 @@ form button{margin-top:1rem}
 #name{overflow-wrap:anywhere}
 #toast{position:absolute;inset-inline:1rem;bottom:.9rem;text-align:center;background:#322f35;color:#f5eff7;border-radius:1.5rem;padding:.4rem .75rem;visibility:hidden}
 #toast.on{visibility:visible}
+@media(max-width:44rem){
+  body{padding:1.25rem 1rem}
+  #demo{gap:1.25rem}
+  #guide{display:contents}
+  #lead{flex-basis:100%;font-size:1rem;line-height:1.5}
+  #hint{order:2;flex-basis:100%;font-size:.85rem;line-height:1.5}
+  #guide p+p{margin-top:0}
+  #phone button{min-height:2.75rem}
+}
 </style>
 </head>
 <body>

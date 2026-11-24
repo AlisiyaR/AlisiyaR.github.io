@@ -297,7 +297,7 @@
       gallery(u.shotsTitle, p.shots, p.wide), gallery(u.diagrams, p.diagrams, true),
       h("div", { class: "after" },
         h("a", { class: "nextp", href: next.page }, h("span", {}, h("small", {}, u.next), h("strong", {}, txt(next.title))), icon("arrow")),
-        h("div", { class: "ask" }, h("h2", {}, u.more), h("div", { class: "links" }, cv("btn"), link(u.linkedin, S.links.linkedin, "btn", icon("linkedin", "ring")), mail()))));
+        h("div", { class: "ask" }, h("h2", {}, u.more), links())));
   }
 
   function render() {

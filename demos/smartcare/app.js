@@ -71,10 +71,11 @@
   const tally = (list, f) => list.reduce((m, i) => (m[f(i)] = (m[f(i)] || 0) + 1, m), {});
 
   /* ---------- מצב וסינון ---------- */
+  const NOT_DONE = "Not done"; // סינון לכל מה שלא הושלם, כמו בתרשימים ב-Summary
   const none = { q: "", type: "", priority: "", status: "", epic: "", who: "" };
   let f = { ...none };
   const state = { tab: "Board", sprint: 2, group: "", closed: new Set(), open: new Set(), tree: new Set(epics.map(e => e.key)), tl: new Set(), sort: "", desc: false, month: 9 };
-  const match = i => (!f.type || i.type === f.type) && (!f.priority || i.priority === f.priority) && (!f.status || i.status === f.status)
+  const match = i => (!f.type || i.type === f.type) && (!f.priority || i.priority === f.priority) && (!f.status || (f.status === NOT_DONE ? i.status !== "Done" : i.status === f.status))
     && (!f.epic || i.epic === f.epic) && (!f.who || (f.who === "me") === i.assigned)
     && (!f.q || (i.key + " " + i.summary).toLowerCase().includes(f.q.toLowerCase()));
   // כרטיס או שורה נשארים גם אם רק תת-משימה שלהם מתאימה
@@ -99,7 +100,7 @@
       h("input", { type: "search", placeholder: "Search", "aria-label": "Search work items", value: f.q, oninput: e => { f.q = e.target.value.trim(); draw(); } }),
       who("none", "Unassigned", icon("person")), who("me", ME, "AR"),
       h("div", { class: "fs" }, pick("Type", "type", (opts.types || TYPES).map(x => [x, x])), pick("Priority", "priority", PRIO.map(x => [x, x])),
-      ...(opts.status ? [pick("Status", "status", STATUS.map(x => [x, x]))] : []),
+      ...(opts.status ? [pick("Status", "status", [NOT_DONE, ...STATUS].map(x => [x, x]))] : []),
       pick("Epic", "epic", epics.map(e => [e.key, e.summary])),
       btn({ class: "clear", onclick: () => { f = { ...none }; render(); } }, "Clear"), ...extra));
     return bar;
@@ -153,12 +154,12 @@
             h("div", { class: "prog" }, ["Done", "In Progress", "To Do"].filter(s => c[s]).map(s => h("i", { class: "b-" + css(s), style: `width:${c[s] / list.length * 100}%`, title: `${s}: ${c[s]}` }, Math.round(c[s] / list.length * 100) + "%"))));
         })),
       panel("Priority breakdown", `The ${open.length} work items that are not done.`,
-        h("div", { class: "chart" }, PRIO.map(p => btn({ "aria-label": `${p}: ${prios[p]}`, onclick: () => toList({ priority: p }) }, String(prios[p]), h("i", { style: `height:${prios[p] / top * 85}%` })))),
+        h("div", { class: "chart" }, PRIO.map(p => btn({ "aria-label": `${p}: ${prios[p]}`, onclick: () => toList({ priority: p, status: NOT_DONE }) }, String(prios[p]), h("i", { style: `height:${prios[p] / top * 85}%` })))),
         h("div", { class: "labels" }, PRIO.map(p => h("span", {}, prio(p), p)))),
-      panel("Types of work", `The ${open.length} work items that are not done.`, ["Sub-task", "Task", "Bug", "Story", "Epic"].map(t => dist([icon(t, "k-" + t), t], types[t], () => toList({ type: t })))),
+      panel("Types of work", `The ${open.length} work items that are not done.`, ["Sub-task", "Task", "Bug", "Story", "Epic"].map(t => dist([icon(t, "k-" + t), t], types[t], () => toList({ type: t, status: NOT_DONE })))),
       panel("Team workload", `The ${open.length} work items that are not done.`,
-        dist([h("span", { class: "av" }, "AR"), "Alisiya R."], mine, () => toList({ who: "me" })),
-        dist([h("span", { class: "av none" }, icon("person")), "Unassigned"], open.length - mine, () => toList({ who: "none" }))),
+        dist([h("span", { class: "av" }, "AR"), "Alisiya R."], mine, () => toList({ who: "me", status: NOT_DONE })),
+        dist([h("span", { class: "av none" }, icon("person")), "Unassigned"], open.length - mine, () => toList({ who: "none", status: NOT_DONE }))),
       panel("Sprints", "40 work items are planned in each sprint.", SMC.sprints.map(s => btn({ class: "dist", onclick: () => { state.sprint = s.id; f = { ...none }; go("Board"); } },
         h("span", {}, s.name), h("span", {}, `${s.state}, ${short(s.start)} – ${short(s.end)}`))))
     ));

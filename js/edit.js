@@ -18,8 +18,8 @@
   pair("ראש העמוד", "name", "שם", S.name);
   pair("ראש העמוד", "headline", "כותרת מתחת לשם", S.headline);
   pair("ראש העמוד", "intro", "פתיח", S.intro);
-  for (const [k, l] of [["title", "כותרת"], ["lead", "הסבר"], ["hint", "רמז"], ["note", "הערה"], ["end", "סיום"]]) pair("משחקון הפתיח", `teaser.${k}`, l, S.teaser[k]);
-  S.teaser.items.forEach((s, i) => pair("משחקון הפתיח", `teaser.${i}.note`, `הסבר למייל ${i + 1}`, s.note));
+  for (const [k, l] of [["title", "כותרת"], ["lead", "הסבר"], ["hint", "רמז"], ["note", "הערה"], ["end", "סיום"]]) pair("המשחקון של Heido", `teaser.${k}`, l, S.teaser[k]);
+  S.teaser.items.forEach((s, i) => pair("המשחקון של Heido", `teaser.${i}.note`, `הסבר למייל ${i + 1}`, s.note));
   for (const p of S.projects) {
     const g = "פרויקט: " + p.title.he;
     pair(g, `projects.${p.id}.title`, "שם", p.title);

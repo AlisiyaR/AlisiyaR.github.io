@@ -18,7 +18,7 @@ window.SITE = {
     email: "alisiya1r.ar@gmail.com"
   },
 
-  // המשחקון בפתיח (js/teaser.js): מיילי בדיקה אמיתיים מ-Heido.
+  // המשחקון בכרטיס של Heido (js/teaser.js): מיילי בדיקה אמיתיים מ-Heido.
   // ai = התשובה שנשמרה בבדיקה; expected = התשובה הצפויה בקובצי הבדיקה (test-data במאגר); mark = הפסקה המכריעה.
   teaser: {
     title: { he: "מי מסווג טוב יותר, אתם או ה-AI?", en: "Can you out-triage the AI?" },
@@ -40,7 +40,7 @@ window.SITE = {
   },
 
   // case: תיק המקרה בעמוד הפרויקט (look = הסבר על הדמו; instead = החלופה; runs = תרשים; trace = מעקב אחרי דרישה).
-  // page: קובץ העמוד. shows: מה הפרויקט מראה. result: תוצאה אחת, מגובה במאגר. peek: תצוגה בכרטיס המוביל (הפרויקט הראשון).
+  // page: קובץ העמוד. shows: מה הפרויקט מראה. result: תוצאה אחת, מגובה במאגר.
   // code: קישור אחד, או רשימה של { label, url }.
   // demo: כתובת העמוד שנפתח בתוך עמוד הפרויקט. ריק = "הדמו בהכנה".
   // shots: צילומי מסך לאורך (לא חובה); עם wide: true, צילומים לרוחב. מוצגים בעמוד הפרויקט.
@@ -49,7 +49,6 @@ window.SITE = {
       id: "heido-code", page: "heido.html",
       shows: { he: "אינטגרציה של API, בדיקת תשובות AI, טיפול בתקלות", en: "API integration, testing AI output, handling failures" },
       result: { he: "100% בקטגוריה ובעובד ו-97% בעדיפות, על 30 מיילי בדיקה שכתבתי", en: "100% for category and assignee and 97% for priority, on 30 test emails I wrote" },
-      peek: [["Main Server Down", "High", "Ryan Mitchell"], ["MFA Login Failure", "High", "Daniel Anderson"], ["Replace sticky keyboard", "Low", "Ryan Mitchell"], ["Customer Callback Request", "Low", "Emily Carter"]],
       title: { he: "Heido: מיון מיילים של תמיכה עם AI", en: "Heido: AI support email triage" },
       summary: {
         he: "מערכת שקוראת מיילים של לקוחות, מסווגת אותם עם AI ופותחת משימה לעובד המתאים. התחילה כאב-טיפוס ללא קוד ב-Make.com, ונבנתה מחדש ב-Python.",

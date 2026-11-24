@@ -1,4 +1,4 @@
-// משחקון הפתיח: מנחשים עדיפות של מייל בדיקה, ורואים מה ה-AI ענה.
+// המשחקון בכרטיס של Heido: מנחשים עדיפות של מייל בדיקה, ורואים מה ה-AI ענה.
 // הנתונים ב-js/content.js (teaser): מיילים ותשובות שמורות מפרויקט Heido. בלי רשת ובלי שמירה.
 window.TEASER = ({ h, tr, icon, data, lang, href }) => {
   const T = {
@@ -50,5 +50,5 @@ window.TEASER = ({ h, tr, icon, data, lang, href }) => {
   }
   ask();
   return h("aside", { class: "tz", "aria-labelledby": "tz-title" },
-    h("h2", { id: "tz-title" }, tr(data.title)), h("p", { class: "tz-lead" }, tr(data.lead)), step, h("p", { class: "tz-note" }, tr(data.note)));
+    h("h3", { id: "tz-title" }, tr(data.title)), h("p", { class: "tz-lead" }, tr(data.lead)), step, h("p", { class: "tz-note" }, tr(data.note)));
 };

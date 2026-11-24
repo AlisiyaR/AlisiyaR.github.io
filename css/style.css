@@ -29,19 +29,17 @@ main:focus{outline:0}
 button{font:inherit;font-size:.9rem;color:var(--soft);background:none;border:0;padding:.5rem .6rem;border-radius:4px;cursor:pointer}
 button:hover{background:var(--panel);color:var(--ink)}
 
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,27rem);align-items:center;gap:3rem 4rem;padding-block:clamp(2.25rem,4.5vw,4rem)}
+.hero{padding-block:clamp(2.25rem,4.5vw,4rem)}
 .hero h1{font-size:clamp(2.2rem,4.6vw,3.4rem);letter-spacing:-.02em}
 .lead{font-size:clamp(1.2rem,2.4vw,1.55rem);line-height:1.4;margin-top:1.25rem;max-width:36ch}
 .hero .lead{margin-top:.6rem;color:var(--acc);font-weight:500}
-.intro{color:var(--soft);font-size:1.125rem;margin-block:1rem 1.75rem;max-width:52ch}
-.social{display:flex;flex-wrap:wrap;gap:.25rem 1.5rem;margin-top:1rem}
-.plainlink{display:inline-flex;align-items:center;gap:.5rem;min-height:2.75rem;font-weight:500;text-decoration:none}
-.plainlink:hover{text-decoration:underline}
-.pitch .mail{margin-top:.5rem}
+.intro{color:var(--soft);font-size:1.125rem;margin-block:1rem 1.75rem;max-width:64ch}
 
-/* משחקון הפתיח */
-.tz{overflow-anchor:none;background:var(--panel);border-radius:12px;padding:1.4rem 1.5rem 1.1rem}
-.tz h2{font-size:1.35rem}
+/* המשחקון של Heido */
+.go{margin-top:1.1rem}
+
+.tz{overflow-anchor:none;background:var(--panel);padding:1.4rem 1.5rem 1.1rem}
+.tz h3,.feature .tz h3{font-size:1.35rem;margin:0}
 .tz-lead{margin-top:.4rem;color:var(--soft);line-height:1.5}
 .tz-step{display:flex;flex-direction:column;gap:.8rem;min-height:27rem;margin-top:.9rem}
 .tz-count{font-size:.85rem;font-weight:500;color:var(--soft)}
@@ -76,7 +74,7 @@ button.btn:hover{background:none;border-color:var(--acc);color:var(--acc)}
 .mail{display:inline-flex;flex-wrap:wrap;align-items:center;gap:.6rem;max-width:100%}
 .mail bdi{overflow-wrap:anywhere}
 .copied{color:var(--acc);font-weight:500}
-.btn.round{width:2.75rem;height:2.75rem;padding:0;justify-content:center}
+.icon.ring{width:1.65em;height:1.65em;padding:.32em;margin-block:-.2em;border:1px solid var(--line);border-radius:50%}
 a.btn:hover{border-color:var(--acc);color:var(--acc)}
 .btn.main{background:var(--acc);border-color:var(--acc);color:var(--on)}
 a.btn.main:hover{color:var(--on);filter:brightness(1.1)}
@@ -99,16 +97,9 @@ h2{font-size:1.15rem}
 .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;margin-top:1.5rem}
 .cards .btn{padding-inline:1rem}
 .feature{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
-.feature .info{padding:2rem 2.25rem}
+.feature .info{justify-content:center;padding:2rem 2.25rem}
+.feature .links{margin-top:0}
 .feature h3{font-size:1.9rem}
-.visual{display:flex;flex-direction:column;justify-content:center;gap:1rem;padding:1.5rem;background:var(--panel)}
-.visual .art{aspect-ratio:5/2;padding:0}
-.peek{width:100%;border-collapse:collapse;background:var(--bg);border-radius:8px;overflow:hidden;font-size:.88rem;line-height:1.4}
-.peek th,.peek td{padding:.5rem .75rem;text-align:left;border-bottom:1px solid var(--line)}
-.peek tr:last-child td{border-bottom:0}
-.peek th{font-weight:500;color:var(--soft)}
-.lv{display:inline-block;min-width:4.2rem;padding:.05rem .6rem;border-radius:99rem;text-align:center;font-weight:500;background:var(--panel)}
-.lv.high{background:var(--acc);color:var(--on)}
 .project .facts{display:block;margin-top:.9rem;font-size:.95rem;line-height:1.5}
 .facts dt{font-size:.85rem;font-weight:500;color:var(--acc)}
 .facts dd{margin:0 0 .55rem}
@@ -119,7 +110,7 @@ h2{font-size:1.15rem}
 svg circle{fill:var(--dot)}
 svg circle.alt{fill:var(--dot2)}
 h3{font-size:1.5rem;margin-bottom:.6rem}
-.project p{color:var(--soft)}
+.info p{color:var(--soft)}
 .tags{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;margin:0;padding:0}
 .tags li{background:var(--panel);color:var(--ink);font-size:.9rem;font-weight:500;line-height:1.4;padding:.3rem .9rem;border-radius:99rem}
 .icon{width:1.1em;height:1.1em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -237,21 +228,20 @@ figcaption{color:var(--soft);font-size:.9rem;margin-top:.5rem}
   .top nav a+a{border-top:1px solid color-mix(in srgb,var(--on) 16%,transparent)}
 
   /* דף הבית */
-  .hero{grid-template-columns:minmax(0,1fr);gap:1.75rem;padding-block:1.75rem 1.25rem}
+  .hero{padding-block:1.75rem 1.25rem}
   .hero h1{font-size:clamp(1.9rem,9.4vw,2.6rem)}
   .lead{margin-top:.75rem}
   .hero .lead{font-size:1.15rem;margin-top:.35rem}
   .intro{font-size:1rem;margin-block:.6rem 1.1rem}
-  .social{margin-top:.5rem}
   .tz-step{min-height:28rem}
-  .tz{margin-inline:-.35rem;padding:1.15rem 1.1rem .9rem}
+  .go{display:flex;justify-content:center;min-height:2.875rem;margin-top:.75rem}
+  .tz{padding:1.15rem 1.1rem .9rem}
   .links .btn{flex:1 1 auto;justify-content:center;min-height:2.875rem;padding-inline:clamp(.6rem,3.4vw,1rem)}
   .links{gap:.5rem}
   .mail{display:flex;gap:.5rem}
   .copied:empty{margin-inline-start:-.5rem}
   .links .mail{flex:1 1 100%}
   .mail .btn:first-child{flex:1 1 0;min-width:0;justify-content:center;min-height:2.875rem;padding-inline:.75rem}
-  .links .btn.round,.btn.round{flex:none;width:2.875rem;height:2.875rem;padding:0}
   .copied:not(:empty){flex:1 1 100%;margin-top:.4rem;text-align:center}
   section{padding-block:1.75rem}
   section>h2{font-size:1.5rem;padding-bottom:.65rem;margin-bottom:1.5rem}
@@ -260,9 +250,8 @@ figcaption{color:var(--soft);font-size:.9rem;margin-top:.5rem}
   .feature,.cards{grid-template-columns:minmax(0,1fr)}
   .cards{gap:1.25rem;margin-top:1.25rem}
   .art{max-height:14rem}
-  .visual{padding:1rem}
   .feature h3,.cards h3{font-size:1.3rem}
-  .peek{font-size:.8rem}.peek th,.peek td{padding:.45rem .5rem}.lv{min-width:0}
+  .feature .tz{order:2}
   .glance{grid-template-columns:minmax(0,1fr);gap:.7rem;padding:1rem 1.15rem;margin-top:1.1rem}
   .glance dd{margin:0}
   .look{font-size:1rem;line-height:1.5}
@@ -303,5 +292,5 @@ figcaption{color:var(--soft);font-size:.9rem;margin-top:.5rem}
   .facts dd{margin-bottom:.55rem}
   #contact{padding-bottom:3.5rem}
 }
-@media(min-width:44.01rem) and (max-width:66rem){.hero{grid-template-columns:minmax(0,1fr);gap:2rem}.tz{max-width:36rem}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.feature{grid-template-columns:minmax(0,1fr)}.visual .art{max-height:11rem}}
+@media(min-width:44.01rem) and (max-width:66rem){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.feature{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:22rem){.units i{width:.5rem;height:.5rem}.runs{padding:.9rem}.barcv{display:none}.navcv{display:flex!important}.mail .btn:first-child{padding-inline:.4rem;font-size:.9rem;gap:.45rem}.links{gap:.4rem}.links .btn{font-size:.95rem;padding-inline:.5rem}}

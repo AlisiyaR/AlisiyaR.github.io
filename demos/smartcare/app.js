@@ -23,11 +23,11 @@
   root.dir = he ? "rtl" : "ltr";
   root.dataset.theme = theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   $("lead").textContent = he
-    ? "עברו בין הלשוניות, סננו, ולחצו על פריט כדי לקרוא אותו. כל 123 הפריטים זמינים לצפייה."
-    : "Switch tabs, filter, and click any item to read it. All 123 work items are available to view.";
+    ? "עקבו אחרי דרישה אחת בסביבת ה-Jira. התחילו בסיפור המטופל על קביעת התור הנכון, המשיכו לכללים העסקיים, ראו מה אמור לקרות כשחסרה הפניה, ומצאו את הספרינט שבו תוכננה העבודה. אפשר גם לעיין בכל 123 הפריטים."
+    : "Follow one requirement through the Jira workspace. Start with the patient story about booking the right appointment, then explore the business rules, see what should happen when a referral is missing, and find the sprint where the work was planned. You can also browse all 123 work items.";
   $("note").textContent = he
-    ? "הדמיה לצפייה בלבד, תמונת מצב מ-23.11.2026. זהו פרויקט אקדמי: המערכת לא פותחה, והספרינטים, הסטטוסים, התאריכים והבאגים הם סימולציה משוחזרת. האתר אינו מחובר ל-Jira ואינו מוצר של Atlassian."
-    : "View-only simulation, snapshot of 23 November 2026. This is an academic project: the system was not developed, and the sprints, statuses, dates and bugs are a reconstructed simulation. This site is not connected to Jira and is not an Atlassian product.";
+    ? "הדמיה לצפייה בלבד. זהו פרויקט אקדמי: המערכת לא פותחה, והספרינטים, הסטטוסים, התאריכים והבאגים הם סימולציה משוחזרת. האתר אינו מחובר ל-Jira ואינו מוצר של Atlassian."
+    : "View-only simulation. This is an academic project: the system was not developed, and the sprints, statuses, dates and bugs are a reconstructed simulation. This site is not connected to Jira and is not an Atlassian product.";
 
   function h(tag, attrs, ...children) {
     const e = document.createElement(tag);

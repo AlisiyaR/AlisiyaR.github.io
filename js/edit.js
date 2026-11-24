@@ -27,7 +27,7 @@
     pair(g, `projects.${p.id}.shows`, "מה זה מראה", p.shows);
     pair(g, `projects.${p.id}.result`, "תוצאה", p.result);
     const c = p.case, at = `projects.${p.id}.case.`;
-    for (const [k, l] of [["type", "סוג"], ["role", "תפקיד"], ["when", "מתי"], ["lookLabel", "כותרת השורה מעל הדמו"], ["look", "השורה מעל הדמו"], ["problem", "הבעיה"], ["goal", "המטרה"], ["did", "מה עשיתי (שורה ריקה בין פסקאות)"], ["tested", "איך בדקתי"], ["limits", "מגבלות (שורה ריקה בין סעיפים)"]]) if (c[k]) pair(g, at + k, l, c[k]);
+    for (const [k, l] of [["type", "סוג"], ["role", "תפקיד"], ["when", "מתי"], ["lookLabel", "כותרת השורה מעל הדמו"], ["look", "השורה מעל הדמו"], ["opening", "הרעיון (שורה ריקה בין פסקאות)"], ["planning", "תכנון הפרויקט"], ["didTitle", "כותרת: מה עשיתי"], ["problem", "הבעיה"], ["goal", "המטרה"], ["did", "מה עשיתי (שורה ריקה בין פסקאות)"], ["tested", "איך בדקתי"], ["limits", "מגבלות (שורה ריקה בין סעיפים)"]]) if (c[k]) pair(g, at + k, l, c[k]);
     c.decisions.forEach((d, i) => { for (const [k, l] of [["title", "כותרת"], ["instead", "במקום"], ["why", "למה"]]) if (d[k]) pair(g, `${at}decisions.${i}.${k}`, `החלטה ${i + 1}: ${l}`, d[k]); });
     (c.trace || []).forEach((s, i) => s.forEach((x, j) => pair(g, `${at}trace.${i}.${j}`, `שלב ${i + 1}${j ? ": פירוט" : ""}`, x)));
     if (c.runs) pair(g, at + "runs.note", "הערה לתרשים", c.runs.note);

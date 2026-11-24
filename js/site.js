@@ -2,8 +2,8 @@
   const S = window.SITE;
   const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname); // באתר המפורסם פסקאות זמניות ב"עליי" מוסתרות
   const UI = {
-    he: { projects: "פרויקטים", about: "עליי", how: "איך אני עובדת", skills: "כישורים", edu: "השכלה", exp: "ניסיון תעסוקתי", site: "על האתר", looking: "מה אני מחפשת", contact: "יצירת קשר", github: "GitHub", linkedin: "LinkedIn", cv: "קורות חיים", email: "אימייל", copy: "העתקת כתובת המייל", copied: "הועתק", manual: "הכתובת סומנה, העתיקו עם Ctrl+C", try: "לנסות את הדמו", view: "לעמוד הפרויקט", soon: "הדמו בהכנה", back: "לכל הפרויקטים", full: "פתיחה בחלון מלא", demo: "דמו", missing: "הפרויקט לא נמצא", add: "קישור יתווסף", light: "מצב בהיר", dark: "מצב כהה", other: "English", nav: "ניווט", menu: "תפריט", see: "לפרויקטים", shows: "מה זה מראה", result: "תוצאה", next: "הפרויקט הבא", more: "רוצים לדעת עוד?", skip: "דילוג לתוכן", task: "משימה", priority: "עדיפות", assigned: "עובד", type: "סוג", role: "התפקיד שלי", when: "מתי", glance: "במבט אחד", look: "על הדמו", problem: "הבעיה", goal: "המטרה", did: "מה עשיתי", trace: "דרישה אחת, מהצורך ועד המשימות", decisions: "החלטות", instead: "במקום", why: "למה", source: "המקור", tested: "איך בדקתי", catacc: "קטגוריה ועובד", prio: "עדיפות", version: "גרסת פרומפט", hit: "נכון", miss: "טעות", limits: "תקלות, מגבלות והצעד הבא", shotsTitle: "צילומים", diagrams: "תרשימי UML", video: "סרטון של אב-הטיפוס", close: "סגירה", prev: "הקודם", nextImg: "הבא" },
-    en: { projects: "Projects", about: "About", how: "How I work", skills: "Skills", edu: "Education", exp: "Work experience", site: "About this site", looking: "Looking for", contact: "Contact", github: "GitHub", linkedin: "LinkedIn", cv: "CV", email: "Email", copy: "Copy email address", copied: "Copied", manual: "Address selected, copy with Ctrl+C", try: "Try the demo", view: "View project", soon: "Demo in progress", back: "All projects", full: "Open full page", demo: "Demo", missing: "Project not found", add: "Link coming", light: "Light mode", dark: "Dark mode", other: "עברית", nav: "Navigation", menu: "Menu", see: "See the projects", shows: "What it shows", result: "Result", next: "Next project", more: "Want to know more?", skip: "Skip to content", task: "Task", priority: "Priority", assigned: "Assigned to", type: "Type", role: "My role", when: "When", glance: "At a glance", look: "About the demo", problem: "The problem", goal: "The goal", did: "What I did", trace: "One requirement, from the need to the tasks", decisions: "Decisions", instead: "Instead of", why: "Why", source: "Source", tested: "How I tested it", catacc: "Category and employee", prio: "Priority", version: "Prompt version", hit: "Right", miss: "Missed", limits: "Problems, limits and next steps", shotsTitle: "Screenshots", diagrams: "UML diagrams", video: "Video of the prototype", close: "Close", prev: "Previous", nextImg: "Next" }
+    he: { projects: "פרויקטים", about: "עליי", how: "איך אני עובדת", skills: "כישורים", edu: "השכלה", exp: "ניסיון תעסוקתי", site: "על האתר", looking: "מה אני מחפשת", contact: "יצירת קשר", github: "GitHub", linkedin: "LinkedIn", cv: "קורות חיים", email: "אימייל", copy: "העתקת כתובת המייל", copied: "הועתק", manual: "הכתובת סומנה, העתיקו עם Ctrl+C", try: "לנסות את הדמו", view: "לעמוד הפרויקט", soon: "הדמו בהכנה", back: "לכל הפרויקטים", full: "פתיחה בחלון מלא", demo: "דמו", missing: "הפרויקט לא נמצא", add: "קישור יתווסף", light: "מצב בהיר", dark: "מצב כהה", other: "English", nav: "ניווט", menu: "תפריט", opening: "הרעיון", planning: "תכנון הפרויקט", viewGh: "לפרויקט ב-GitHub", see: "לפרויקטים", shows: "מה זה מראה", result: "תוצאה", next: "הפרויקט הבא", more: "רוצים לדעת עוד?", skip: "דילוג לתוכן", task: "משימה", priority: "עדיפות", assigned: "עובד", type: "סוג", role: "התפקיד שלי", when: "מתי", glance: "במבט אחד", look: "על הדמו", problem: "הבעיה", goal: "המטרה", did: "מה עשיתי", trace: "דרישה אחת, מהצורך ועד המשימות", decisions: "החלטות", instead: "במקום", why: "למה", source: "המקור", tested: "איך בדקתי", catacc: "קטגוריה ועובד", prio: "עדיפות", version: "גרסת פרומפט", hit: "נכון", miss: "טעות", limits: "תקלות, מגבלות והצעד הבא", shotsTitle: "צילומים", diagrams: "תרשימי UML", video: "סרטון של אב-הטיפוס", close: "סגירה", prev: "הקודם", nextImg: "הבא" },
+    en: { projects: "Projects", about: "About", how: "How I work", skills: "Skills", edu: "Education", exp: "Work experience", site: "About this site", looking: "Looking for", contact: "Contact", github: "GitHub", linkedin: "LinkedIn", cv: "CV", email: "Email", copy: "Copy email address", copied: "Copied", manual: "Address selected, copy with Ctrl+C", try: "Try the demo", view: "View project", soon: "Demo in progress", back: "All projects", full: "Open full page", demo: "Demo", missing: "Project not found", add: "Link coming", light: "Light mode", dark: "Dark mode", other: "עברית", nav: "Navigation", menu: "Menu", opening: "The idea", planning: "Project planning", viewGh: "View project on GitHub", see: "See the projects", shows: "What it shows", result: "Result", next: "Next project", more: "Want to know more?", skip: "Skip to content", task: "Task", priority: "Priority", assigned: "Assigned to", type: "Type", role: "My role", when: "When", glance: "At a glance", look: "About the demo", problem: "The problem", goal: "The goal", did: "What I did", trace: "One requirement, from the need to the tasks", decisions: "Decisions", instead: "Instead of", why: "Why", source: "Source", tested: "How I tested it", catacc: "Category and employee", prio: "Priority", version: "Prompt version", hit: "Right", miss: "Missed", limits: "Problems, limits and next steps", shotsTitle: "Screenshots", diagrams: "UML diagrams", video: "Video of the prototype", close: "Close", prev: "Previous", nextImg: "Next" }
   };
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch { return null; } },
@@ -73,8 +73,8 @@
     return svg;
   }
   const tags = list => list.length ? h("ul", { class: "tags" }, list.map(x => h("li", { dir: "ltr" }, x))) : null;
-  const github = p => (Array.isArray(p.code) ? p.code : p.code ? [{ label: "GitHub", url: p.code }] : []).map(c =>
-    h("a", { class: "btn", href: c.url, target: "_blank", rel: "noopener", "aria-label": `${tr(c.label)}, GitHub: ${plain(p.title)}` }, tr(c.label), icon("github", "ring")));
+  const github = (p, long) => (Array.isArray(p.code) ? p.code : p.code ? [{ label: "GitHub", url: p.code }] : []).map(c =>
+    h("a", { class: "btn", href: c.url, target: "_blank", rel: "noopener", "aria-label": `${long ? tr(c.view) || UI[lang].viewGh : tr(c.label) + ", GitHub"}: ${plain(p.title)}` }, long ? glue(tr(c.view) || UI[lang].viewGh) : tr(c.label), icon("github", "ring")));
   // כתובת המייל גלויה; לחיצה מעתיקה אותה
   function mailCopy(address) {
     const u = UI[lang], text = h("bdi", {}, address), note = h("span", { class: "copied", role: "status" });
@@ -249,15 +249,16 @@
   function story(p) {
     const u = UI[lang], c = p.case || {};
     return h("div", { class: "detailtext", id: "story" },
+      c.opening ? block("opening", paras(c.opening)) : null,
+      c.planning ? block("planning", paras(c.planning), c.planningLinks ? h("div", { class: "links" }, c.planningLinks.map(x => link(tr(x.text), x.url, "btn", icon("github", "ring")))) : null) : null,
       c.problem ? block("problem", paras(c.problem)) : null, c.goal ? block("goal", paras(c.goal)) : null,
-      c.did ? block("did", paras(c.did)) : null,
+      c.did ? h("div", { class: "block", id: "did" }, h("h2", {}, c.didTitle ? txt(c.didTitle) : u.did), paras(c.did)) : null,
       c.trace ? block("trace", h("ol", { class: "trace" }, c.trace.map(([a, b]) => h("li", {}, h("strong", {}, txt(a)), h("span", {}, txt(b)))))) : null,
       c.decisions ? block("decisions", h("div", { class: "decisions" }, c.decisions.map(d => h("article", {}, h("h3", {}, txt(d.title)),
         d.instead ? h("p", { class: "note" }, u.instead + ": ", txt(d.instead)) : null, h("p", {}, txt(d.why)),
         d.url ? h("a", { href: d.url, ...OUT(d.url), "aria-label": `${u.source}: ${plain(d.title)}` }, u.source) : null)))) : null,
       c.tested ? block("tested", paras(c.tested), c.runs ? runs(c.runs) : null) : null,
-      c.limits ? block("limits", h("ul", {}, c.limits[lang].map(x => h("li", {}, glue(x))))) : null,
-      tags(p.tech), h("div", { class: "links" }, github(p), c.video ? link(u.video, c.video, "btn", icon("github", "ring")) : null));
+      c.limits ? block("limits", h("ul", {}, c.limits[lang].map(x => h("li", {}, glue(x))))) : null);
   }
   // גלריה: לחיצה מגדילה בתוך העמוד (הקישור עצמו פותח את הקובץ)
   function gallery(title, list, wide) {
@@ -291,6 +292,7 @@
       p.case?.look ? h("p", { class: "look" }, h("strong", {}, (tr(p.case.lookLabel) || u.look) + ": "), txt(p.case.look)) : null,
       p.demo ? h("iframe", { src: p.demo, onload: fit, title: u.demo + ": " + plain(p.title) })
         : h("div", { class: "soon" }, pattern(p.id), h("p", {}, u.soon)),
+      h("div", { class: "under" }, tags(p.tech), h("div", { class: "links" }, github(p, true), p.case?.video ? link(u.video, p.case.video, "btn", icon("github", "ring")) : null)),
       story(p),
       gallery(u.shotsTitle, p.shots, p.wide), gallery(u.diagrams, p.diagrams, true),
       h("div", { class: "after" },

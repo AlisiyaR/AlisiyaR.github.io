@@ -123,15 +123,15 @@ window.SITE = {
       tech: ["Python", "Make.com", "Google Gemini", "Gmail API", "OAuth 2.0", "monday.com", "Pydantic", "Claude Code"],
       demo: "demos/heido/index.html",
       code: [
-        { label: { he: "גרסת קוד: Python", en: "Code version: Python" }, url: "https://github.com/AlisiyaR/heido-ai-triage-code" },
-        { label: { he: "גרסה ללא קוד: Make.com", en: "No-code version: Make.com" }, url: "https://github.com/AlisiyaR/heido-ai-triage-no-code" }
+        { view: { he: "לקוד ה-Python ב-GitHub", en: "View Python version on GitHub" }, label: { he: "גרסת קוד: Python", en: "Code version: Python" }, url: "https://github.com/AlisiyaR/heido-ai-triage-code" },
+        { view: { he: "לגרסת Make.com ב-GitHub", en: "View Make.com version on GitHub" }, label: { he: "גרסה ללא קוד: Make.com", en: "No-code version: Make.com" }, url: "https://github.com/AlisiyaR/heido-ai-triage-no-code" }
       ]
     },
     {
       id: "smartcare", page: "smartcare.html",
       shows: { he: "תרגום בעיה עסקית לדרישות ולתוכנית", en: "Turning a business problem into requirements and a plan" },
       result: { he: "12 סיפורי משתמש, 123 פריטים מתועדפים ושלושה ספרינטים", en: "12 user stories, 123 prioritized items and three sprints" },
-      title: { he: "SmartCare: ניתוח מערכת ותכנון Agile", en: "SmartCare: systems analysis and Agile planning" },
+      title: { he: "SmartCare — תכנון פלטפורמה רפואית ב-Jira", en: "SmartCare — Planning a Healthcare Platform in Jira" },
       summary: {
         he: "ניתוח ותכנון של פלטפורמה מוצעת לקופת חולים, מהבעיה העסקית ועד תוכנית Scrum עם 123 פריטים ב-Jira.",
         en: "Systems analysis and planning for a proposed health-plan platform, from the business problem to a Scrum plan with 123 Jira items."
@@ -141,16 +141,28 @@ window.SITE = {
         role: { he: "ניתוח מערכת ותכנון, באופן עצמאי", en: "Systems analysis and planning, independently" },
         when: { he: "מאי–יוני 2026", en: "May–June 2026" },
         look: { he: "עותק לצפייה בלבד של סביבת ה-Jira של הפרויקט, שמראה איך דרישות הפכו לסיפורי משתמש, למשימות ולספרינטים.", en: "A view-only copy of the project's Jira workspace. It shows how requirements became user stories, tasks and sprints." },
-        problem: { he: "אפליקציות של קופות חולים תומכות בפעולות בודדות, כמו קביעת תור או צפייה בתוצאות בדיקה, אבל לא בטיפול כתהליך אחד. המטופלים עוקבים בעצמם אחרי בדיקות, מסמכים והפניות, וזה מעכב אבחון וטיפול.", en: "Health-plan apps support single actions, such as booking an appointment or viewing test results, but not a member's care as one process. Members track tests, documents and referrals on their own, which delays diagnosis and treatment." },
-        did: {
+        opening: {
           he: [
-            "SmartCare היא פלטפורמה מוצעת שמרכזת את המידע ומציגה לכל מטופל את הצעד הבא, ולרופאים את אותה תמונה.",
-            "הגדרתי את הבעיה, את המצב הקיים והרצוי ואת בעלי העניין, וכתבתי מסמך ייזום, ניתוח היתכנות ו-12 סיפורי משתמש עם קריטריוני קבלה. פירקתי את הסיפורים ל-24 משימות ו-72 תתי-משימות ותכננתי שלושה ספרינטים ב-Jira."
+            "SmartCare היא פלטפורמה שהצעתי למטופלים שעוברים סדרה של שלבים רפואיים, כמו קבלת אבחון, טיפול במחלה, או הכנה לניתוח והחלמה ממנו. הרעיון נולד מפער שזיהיתי בשירותי הבריאות הדיגיטליים. מטופלים יכולים לקבוע תורים, לצפות בתוצאות בדיקות ולכתוב לרופא, אבל עדיין צריכים להרכיב בעצמם את התמונה של מה צריך לקרות ובאיזה סדר.",
+            "תכננתי את SmartCare סביב ציר טיפול אישי. המטופלים יראו כל שלב לפי הסדר, מה כבר השלימו ומה עליהם לעשות בהמשך. לפני תור, הציר יתריע על בדיקות שעדיין צריך להשלים או על מסמכים שצריך להגיש. תכננתי את הפרויקט באופן עצמאי, במסגרת קורס ניהול פרויקטי תוכנה."
           ],
           en: [
-            "SmartCare is a proposed platform that brings the information together and shows each member the next step, with the same view for physicians.",
-            "I defined the problem, the current and target state and the stakeholders, and wrote a project charter, a feasibility analysis and 12 user stories with acceptance criteria. I broke the stories into 24 tasks and 72 sub-tasks and planned three sprints in Jira."
+            "SmartCare is a platform I proposed for patients going through a series of medical steps, such as getting a diagnosis, receiving treatment for an illness, or preparing for and recovering from surgery. The idea came from a gap I noticed in digital health services. Patients can book appointments, view test results, and message their doctor, but they still have to piece together what needs to happen and in what order.",
+            "I designed SmartCare around a personal care timeline. Patients would see each step in sequence, what they had already completed, and what they needed to do next. Ahead of an appointment, the timeline would flag any tests they still needed to complete or documents they needed to provide. I planned the project independently as part of my Software Project Management course."
           ]
+        },
+        planning: {
+          he: "לפני שבניתי את ה-Backlog ב-Jira, בדקתי את הכדאיות של SmartCare וכתבתי את מסמך הייזום. במסמך תכנון נפרד זיהיתי את ההנחות שמאחורי הפרויקט, את האילוצים על הביצוע ואת הסיכונים שאצטרך לנהל, כולל הקושי בחיבור של SmartCare למערכות הקיימות של קופת החולים.",
+          en: "Before building the Jira backlog, I assessed SmartCare’s feasibility and wrote the project charter. In a separate planning document, I identified the assumptions behind the project, the constraints on delivery, and the risks I would need to manage, including the difficulty of connecting SmartCare to the health plan’s existing systems."
+        },
+        planningLinks: [
+          { text: { he: "מסמך הייזום ובדיקת הכדאיות", en: "Project charter and feasibility analysis" }, url: "https://github.com/AlisiyaR/smartcare-systems-analysis/blob/main/docs/project-initiation.md" },
+          { text: { he: "הנחות, אילוצים וסיכונים", en: "Assumptions, constraints, and risks" }, url: "https://github.com/AlisiyaR/smartcare-systems-analysis/blob/main/docs/assumptions-constraints-risks.md" }
+        ],
+        didTitle: { he: "איך תכננתי את העבודה ב-Jira", en: "How I planned the work in Jira" },
+        did: {
+          he: ["ארגנתי את ה-Backlog סביב שלושה מקרי שימוש: מעקב אחרי מסע הטיפול של המטופל, קביעת תורים וניהול התיק הרפואי הדיגיטלי. לכל מקרה שימוש כתבתי סיפורי משתמש עם קריטריוני קבלה, פירקתי את העבודה למשימות ולתתי-משימות, וקבעתי עדיפויות לפי ערך ותלויות. לאחר מכן תכננתי שלושה ספרינטים והשתמשתי בלוח Scrum כדי להדגים איך העבודה מתקדמת בין השלבים."],
+          en: ["I organized the backlog around three use cases: following a patient’s care journey, scheduling appointments, and managing the digital medical record. For each use case, I wrote user stories with acceptance criteria, broke the work into tasks and subtasks, and set priorities based on value and dependencies. I then planned three sprints and used a Scrum board to demonstrate how the work would move through each stage."]
         },
         trace: [
           [{ he: "הצורך", en: "The need" }, { he: "לקבוע את התור הנכון כבר בפעם הראשונה", en: "Book the right appointment the first time" }],
@@ -199,7 +211,7 @@ window.SITE = {
       case: {
         type: { he: "פרויקט אקדמי, התמחות סייבר", en: "Academic project, cybersecurity specialization" },
         role: { he: "תכנון, כתיבה ב-Bash ותיעוד", en: "Design, Bash scripting and documentation" },
-        when: { he: "2025–2026", en: "2025–2026" },
+        when: { he: "2026", en: "2026" },
         look: { he: "שחזור של שלושת הכלים במסוף, לפי השאלות, בדיקות הקלט וההודעות של הסקריפטים המקוריים. הפלט מבוסס על הסקריפטים ועל הרצות המעבדה.", en: "The three tools recreated in a terminal, following the questions, input checks and messages of the original scripts. The output is based on the scripts and their lab runs." },
         problem: { he: "בדיקת רשת דורשת להריץ כמה כלים בסדר הנכון ולשמור את הפלט שלהם. המטרה: תהליך אחד שחוזר על עצמו, וכל פעולה בו מתועדת.", en: "Checking a network means running several tools in the right order and keeping their output. The goal: one repeatable process in which every action is recorded." },
         did: {

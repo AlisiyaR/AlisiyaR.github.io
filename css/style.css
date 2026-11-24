@@ -136,6 +136,9 @@ iframe{display:block}
 .glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:1rem 2rem;margin-top:1.75rem;padding:1.1rem 1.4rem;background:var(--panel);border-radius:12px;font-size:.98rem;line-height:1.45}
 .glance dt{font-size:.85rem;font-weight:500;color:var(--acc)}
 .glance dd{margin:.1rem 0 0}
+.block .links{margin-top:1rem}
+.under{margin-top:1.5rem}
+.under .links{margin-top:1rem}
 .look{margin-bottom:.9rem}
 .look strong,.block strong{font-weight:600}
 .block>h2,.gal>h2{font-size:1.4rem;margin-bottom:.7rem}

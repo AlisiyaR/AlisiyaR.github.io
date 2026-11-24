@@ -4,12 +4,12 @@
 window.SITE = {
   name: { he: "אליסיה רבינוביץ", en: "Alisiya Rabinovich" },
   headline: {
-    he: "פיתוח, ניתוח מערכות ו-AI",
-    en: "Development, systems analysis and AI"
+    he: "פיתוח תוכנה וניתוח מערכות",
+    en: "Software Development & Systems Analysis"
   },
   intro: {
-    he: "אני בונה אוטומציות ואינטגרציות ב-Python, ב-Bash ובכלי No-Code, מהבנת התהליך ועד בדיקת התוצאה. תואר ראשון בניהול מערכות מידע (ממוצע 89), בהתמחות סייבר.",
-    en: "I build automations and integrations in Python, Bash and no-code tools, from understanding the process to testing the result. B.A. in Management Information Systems (GPA 89), with a cybersecurity specialization."
+    he: "תיק העבודות שלי מרכז פרויקטים בפיתוח תוכנה ובניתוח מערכות, עם דמואים אינטראקטיביים והצצה להחלטות התכנון שמאחורי כל פרויקט. כבוגרת ניהול מערכות מידע, מעניין אותי במיוחד איך צורך עסקי הופך למערכת עובדת.",
+    en: "My portfolio brings together projects in software development and systems analysis, with interactive demos and a look at the design decisions behind each project. As a Management Information Systems graduate, I’m especially interested in how a business need becomes a working system."
   },
   links: {
     github: "https://github.com/AlisiyaR",
@@ -61,8 +61,14 @@ window.SITE = {
         lookLabel: { he: "על המיילים בדמו", en: "About the emails" },
         look: { he: "כל המיילים בדמו סווגו במערכת האמיתית במהלך הבדיקות, וארבעה מהם מסומנים כבדיקות של מקרי קצה. הסיווג נעשה על ידי AI, ולכן התוצאה עשויה להשתנות בין הרצות.", en: "Every email in this demo was classified by the real system during testing, and four are marked as edge-case tests. Because an AI does the classification, results can vary between runs." },
         problem: {
-          he: ["בצוותי תמיכה רבים ממיינים כל מייל ידנית. זה איטי ולא אחיד, ופנייה דחופה יכולה לחכות מאחורי בקשות שגרתיות.", "הצורך העסקי רחב יותר ממיון: אפשר לייעל את כל תהליך קבלת הפניות. מענה מהיר במייל יכול לעודד לקוחות לבחור בו במקום בטלפון, ב-WhatsApp, בפקס או בדואר. בטווח הארוך, ריכוז התקשורת בערוץ אחד יכול לחסוך זמן לצוות התמיכה וכסף ללקוח."],
-          en: ["Many support teams sort every email by hand. It is slow and inconsistent, and an urgent issue can wait behind routine requests.", "The business need goes beyond sorting: the whole intake process can be more efficient. Fast handling by email can encourage customers to choose it over phone calls, WhatsApp, fax or post. Over time, moving communication to one channel could save the support team time and the customer money."]
+          he: [
+            "הרעיון ל-Heido נולד מהניסיון שלי בתמיכת לקוחות. פניות הגיעו בטלפון, ב-WhatsApp ובפקס. העובדים היו צריכים לתעד כל פנייה, להעריך את הדחיפות שלה ולהחליט איזה צוות יטפל בה. עם תחלופה גבוהה של עובדים, היה קשה לשמור על אחידות בהחלטות האלה. פנייה שנשלחה לצוות הלא נכון הייתה צריכה להיבדק ולעבור ניתוב מחדש, מה שהוסיף עומס על הצוות והשאיר את הלקוח ממתין זמן רב יותר. גם בעיה דחופה יכלה לחכות מאחורי בקשות שגרתיות אם ההשפעה שלה לא הייתה ברורה במבט ראשון.",
+            "ראיתי הזדמנות לשפר את כל התהליך, החל מהמייל. לקוח יוכל לתאר את הבעיה פעם אחת ולקבל מספר פנייה, בזמן שהמערכת מסכמת את הפנייה, מעריכה את העדיפות שלה ומנתבת אותה לצוות המתאים. אם המייל יהפוך לדרך מהירה ואמינה יותר לקבל עזרה, ייתכן שיותר לקוחות יעדיפו אותו על פני שיחה או שליחת הודעת WhatsApp, פקס או מכתב. לאורך זמן, זה יכול להפחית את העבודה הידנית של צוות התמיכה ולחסוך ללקוחות את הזמן ואת ההוצאה של מעקב אחר הפנייה."
+          ],
+          en: [
+            "The idea for Heido came from my experience in customer support. Requests came in by phone, WhatsApp, and fax. Employees had to log each one, assess its urgency, and decide which team should handle it. With frequent staff turnover, it was difficult to keep those decisions consistent. A request sent to the wrong team had to be reviewed and routed again, adding to the team’s workload and leaving the customer waiting longer. An urgent issue could also sit behind routine requests if its impact wasn’t clear at first glance.",
+            "I saw an opportunity to improve the whole process, starting with email. A customer could describe the issue once and receive a ticket number, while the system summarized the request, assessed its priority, and routed it to the right team. If email became a faster, more reliable way to get help, more customers might choose it over calling or sending a WhatsApp message, fax, or letter. Over time, that could reduce manual work for the support team and save customers the time and expense of following up."
+          ]
         },
         did: {
           he: [
@@ -297,13 +303,21 @@ window.SITE = {
 
   about: {
     he: [
-      "אני אוהבת להבין איך מערכות ותהליכים עובדים, למצוא איפה הם נתקעים ולבנות פתרונות טובים יותר. ב-Bynet Semech נכנסתי לתפקיד שלא היה מאויש ובניתי את תהליכי העבודה והנהלים שלו מאפס, תוך כדי התואר.",
-      "התואר והתמחות הסייבר נתנו לי בסיס בתכנות מונחה עצמים, SQL, Linux ורשתות. אני לומדת מהר ובאופן עצמאי, ופתוחה לתפקידי ג'וניור בפיתוח, באוטומציה, ב-AI ובניתוח מערכות."
+      "פיתוח תוכנה וניתוח מערכות היו המקצועות האהובים עליי בתואר הראשון בניהול מערכות מידע. לצד יסודות התכנות למדתי ניתוח מערכות, עיצוב חוויית משתמש, ניתוח נתונים, אבטחת מידע וניהול פרויקטים. יחד, המקצועות האלה עיצבו את הדרך שבה אני ניגשת למערכת חדשה. אני מתחילה ממה שהמשתמש מנסה להשיג, ואז בודקת אילו נתונים הוא צריך ולמי צריכה להיות גישה אליהם. משם אני מתכננת את הפרויקט ומחלקת את העבודה לשלבי פיתוח.",
+      "במהלך הלימודים עבדתי בתמיכה טכנית ותפעולית ב-Bynet Semech. זיהיתי דפוסים בפניות חוזרות ופיתחתי נהלים לטיפול בהן בין הצוותים. הניסיון הזה עדיין משפיע על הדרך שבה אני ניגשת לפרויקטים שלי. אני רוצה להבין איך אנשים עובדים בפועל, איפה הם נתקלים בקשיים, ומה המערכת צריכה לעשות כדי לעזור."
     ],
     en: [
-      "I enjoy understanding how systems and processes work, finding where they break and building better solutions. At Bynet Semech, I stepped into an unstaffed role and built its workflows and procedures from scratch while studying for my degree.",
-      "My degree and cybersecurity specialization gave me a foundation in object-oriented programming, SQL, Linux and networking. I learn fast and independently, and I'm open to junior roles in development, automation, AI and systems analysis."
+      "Software development and systems analysis were my favorite subjects during my B.A. in Management Information Systems. Alongside programming fundamentals, I studied systems analysis, UX design, data analysis, information security, and project management. Together, these subjects shaped how I approach a new system. I start with what the user is trying to accomplish, then consider what data they need and who should have access to it. From there, I plan the project and organize the work into development phases.",
+      "While studying, I worked in technical and operational support at Bynet Semech. I noticed patterns in recurring requests and developed procedures for handling them across teams. That experience still influences how I approach my own projects. I want to understand how people actually do their work, where they run into difficulties, and what a system needs to do to help."
     ]
+  },
+  looking: {
+    he: "אני מחפשת תפקיד ג'וניור בפיתוח תוכנה או בניתוח מערכות. מעניינות אותי במיוחד הזדמנויות שבהן אוכל לעבוד עם משתמשים כדי להבין צורך עסקי, לעזור לעצב את הדרישות ולהישאר מעורבת בזמן שהתוכנה נבנית.",
+    en: "I’m looking for a junior role in software development or systems analysis. I’m especially interested in opportunities where I can work with users to understand a business need, help shape the requirements, and stay involved as the software is built."
+  },
+  closing: {
+    he: "אם אתם מגייסים לתפקיד ג'וניור בפיתוח תוכנה או בניתוח מערכות, אשמח לשמוע על הצוות ועל מה שאתם בונים.",
+    en: "If you’re hiring for a junior software development or systems analysis role, I’d be happy to hear about the team and what you’re building."
   },
   how: [
     { label: { he: "מתחילה מהבעיה", en: "I start with the problem" },
@@ -344,9 +358,8 @@ window.SITE = {
       note: { he: "סריקת רשתות, בדיקות חדירה, מיפוי פגיעויות והדמיית תקיפות. במהלך ההתמחות בניתי שלושה כלי אוטומציה ב-Bash.", en: "Network scanning, penetration testing, vulnerability mapping and attack simulation. I built three Bash automation tools during the specialization." } }
   ],
   site: [
-    { label: { he: "בלי מפתחות API", en: "No API keys" }, text: { he: "אתר סטטי לא יכול להסתיר סוד, ולכן אף דמו לא משתמש במפתח. מזג האוויר מגיע מ-Open-Meteo, שלא דורש מפתח.", en: "A static site cannot hide a secret, so no demo uses a key. The weather comes from Open-Meteo, which needs none." } },
-    { label: { he: "בלי סריקות אמיתיות", en: "No real scans" }, text: { he: "המסוף מציג תוצאות של רשת בדיונית, ותשובות ה-AI נשמרו מהבדיקות.", en: "The terminal shows results for a fictional network, and the AI answers were saved from testing." } },
-    { label: { he: "איך נבנה", en: "How it was made" }, text: { he: "HTML, CSS ו-JavaScript בלי ספריות, בעזרת Claude.", en: "Plain HTML, CSS and JavaScript with no framework, with the help of Claude." } }
+    { label: { he: "תיק העבודות", en: "The portfolio" }, text: { he: "בניתי את תיק העבודות הדו-לשוני הזה ב-HTML, ב-CSS וב-JavaScript, בעזרת Claude. הדמואים מאפשרים למבקרים להכיר את העבודה ישירות בדפדפן.", en: "I built this bilingual portfolio with HTML, CSS, and JavaScript, with assistance from Claude. The project demos let visitors explore the work directly in their browser." } },
+    { label: { he: "הדמואים", en: "The demos" }, text: { he: "דמו מזג האוויר משתמש בנתונים חיים מ-Open-Meteo. הדמו של Heido משתמש בתשובות של המודל שנשמרו במהלך הבדיקות, כך שאפשר להשוות את ההחלטות שלכם לתוצאות שבדקתי. דמו הסייבר משתמש ברשת מדומה.", en: "The weather demo uses live data from Open-Meteo. The Heido demo uses model responses saved during testing, so you can compare your decisions with the results I evaluated. The cybersecurity demo uses a simulated network." } }
   ],
   experience: [
     { when: "2023–2026", what: { he: "נציגת Back Office, תמיכה טכנית ותפעולית, Bynet Semech (משרה חלקית)", en: "Back Office Representative, technical and operational support, Bynet Semech (part-time)" },

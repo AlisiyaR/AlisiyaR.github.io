@@ -38,7 +38,9 @@
     pair("איך אני עובדת", `how.${i}.text`, `פירוט ${i + 1}`, s.text);
   });
   pair("כישורים", "proofNote", "הערה מעל הרשימה", S.proofNote);
-  S.site.forEach((s, i) => { pair("איך האתר נבנה", `site.${i}.label`, `נושא ${i + 1}`, s.label); pair("איך האתר נבנה", `site.${i}.text`, `פירוט ${i + 1}`, s.text); });
+  pair("עליי", "looking", "מה אני מחפשת", S.looking);
+  pair("יצירת קשר", "closing", "משפט סיום", S.closing);
+  S.site.forEach((s, i) => { pair("על האתר", `site.${i}.label`, `נושא ${i + 1}`, s.label); pair("על האתר", `site.${i}.text`, `פירוט ${i + 1}`, s.text); });
   S.skills.forEach((s, i) => {
     pair("כישורים", `skills.${i}.label`, `נושא ${i + 1}`, s.label);
     flat("כישורים", `skills.${i}.items`, `פירוט ${i + 1}`, s, "items");
@@ -48,7 +50,7 @@
     pair(g, `${k}.${i}.what`, `${what} ${i + 1}`, s.what);
     if (s.note) pair(g, `${k}.${i}.note`, `פירוט ${i + 1}`, s.note);
   });
-  const NAMES = { projects: "כותרת: פרויקטים", about: "כותרת: עליי", how: "כותרת: איך אני עובדת", skills: "כותרת: כישורים", edu: "כותרת: השכלה", exp: "כותרת: ניסיון", contact: "כותרת: יצירת קשר", cv: "כפתור: קורות חיים", see: "כפתור: לפרויקטים", try: "כפתור: דמו", back: "קישור: חזרה", full: "קישור: חלון מלא", demo: "כותרת: דמו" };
+  const NAMES = { projects: "כותרת: פרויקטים", about: "כותרת: עליי", how: "כותרת: איך אני עובדת", looking: "כותרת: מה אני מחפשת", skills: "כותרת: כישורים", edu: "כותרת: השכלה", exp: "כותרת: ניסיון", contact: "כותרת: יצירת קשר", cv: "כפתור: קורות חיים", see: "כפתור: לפרויקטים", try: "כפתור: דמו", back: "קישור: חזרה", full: "קישור: חלון מלא", demo: "כותרת: דמו" };
   for (const k in NAMES) add("כותרות וכפתורים", `ui.${k}`, NAMES[k], () => ({ he: UI.he[k], en: UI.en[k] }), (l, v) => { UI[l][k] = v; });
 
   // שינויים שמורים. אם הטקסט בקובץ כבר התעדכן, השינוי הישן נזרק.

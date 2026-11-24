@@ -11,6 +11,10 @@ body{background:var(--panel);padding:1.25rem}
 #demo{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.5rem 3.5rem}
 #guide{flex:0 1 20rem}
 #guide p+p{margin-top:.75rem}
+#cities{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
+#cities button{min-height:2.75rem;padding:.3rem 1rem;border:1px solid var(--edge);border-radius:99rem;background:var(--bg);color:var(--ink);font-weight:500}
+#cities button:hover{border-color:var(--acc);color:var(--acc)}
+#guide #hint{margin-top:.75rem}
 #hint{color:var(--soft);font-size:.9rem}
 
 /* הטלפון: הצבעים של האפליקציה עצמה, לא של האתר */
@@ -39,7 +43,8 @@ form button{margin-top:1rem}
   #guide{display:contents}
   #lead{flex-basis:100%;font-size:1rem;line-height:1.5}
   #hint{order:2;flex-basis:100%;font-size:.85rem;line-height:1.5}
-  #guide p+p{margin-top:0}
+  #guide #hint,#cities{margin-top:0}
+  #cities{flex-basis:100%}
   #phone button{min-height:2.75rem}
 }
 </style>
@@ -48,6 +53,7 @@ form button{margin-top:1rem}
 <div id="demo">
   <div id="guide">
     <p id="lead"></p>
+    <div id="cities" role="group"></div>
     <p id="hint"></p>
   </div>
   <div id="phone" dir="ltr" lang="en">
@@ -82,6 +88,9 @@ form button{margin-top:1rem}
   $("lead").textContent = he
     ? "הקלידו שם של עיר ולחצו על Submit. אחר כך אפשר ללחוץ על Show Detailed Weather."
     : "Type the name of a city and press Submit. Then you can press Show Detailed Weather.";
+  $("cities").setAttribute("aria-label", he ? "ערים לדוגמה" : "Example cities");
+  for (const [city, label] of [["Haifa"], ["Tokyo"], ["Zzqxville", he ? "עיר שלא קיימת" : "A city that doesn't exist"]])
+    $("cities").append(Object.assign(document.createElement("button"), { type: "button", textContent: label || city, onclick() { $("second").hidden = true; $("first").hidden = false; $("city").value = city; submit(); } }));
   const source = document.createElement("a");
   source.href = "https://open-meteo.com/";
   source.target = "_blank";
@@ -178,5 +187,6 @@ form button{margin-top:1rem}
   };
 })();
 </script>
+<script src="../back.js" data-page="weather.html"></script>
 </body>
 </html>

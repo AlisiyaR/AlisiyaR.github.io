@@ -8,10 +8,10 @@ My portfolio site, in Hebrew and English, with a demo of each project that runs 
 
 | Project | What you can do in the demo | Source |
 |---|---|---|
-| [Heido: AI support email triage](https://alisiyar.github.io/project.html?id=heido-code) | Send a ready-made customer email and watch it become a task on the support team's board | [Python](https://github.com/AlisiyaR/heido-ai-triage-code) · [No-code (Make.com)](https://github.com/AlisiyaR/heido-ai-triage-no-code) |
-| [SmartCare: systems analysis and Agile planning](https://alisiyar.github.io/project.html?id=smartcare) | Browse a view-only Scrum workspace with all 123 work items | [Repository](https://github.com/AlisiyaR/smartcare-systems-analysis) |
-| [Cybersecurity lab: Bash automation](https://alisiyar.github.io/project.html?id=cyber-lab) | Run three lab tools in a simulated terminal | [Repository](https://github.com/AlisiyaR/cybersecurity-lab-projects) |
-| [Worldwide Weather: Android app](https://alisiyar.github.io/project.html?id=weather) | Search for a city in a browser version of the app | [Repository](https://github.com/AlisiyaR/worldwide-weather-android) |
+| [Heido: AI support email triage](https://alisiyar.github.io/heido.html) | Send a ready-made customer email and watch it become a task on the support team's board | [Python](https://github.com/AlisiyaR/heido-ai-triage-code) · [No-code (Make.com)](https://github.com/AlisiyaR/heido-ai-triage-no-code) |
+| [SmartCare: systems analysis and Agile planning](https://alisiyar.github.io/smartcare.html) | Browse a view-only Scrum workspace with all 123 work items | [Repository](https://github.com/AlisiyaR/smartcare-systems-analysis) |
+| [Cybersecurity lab: Bash automation](https://alisiyar.github.io/cybersecurity-lab.html) | Run three lab tools in a simulated terminal | [Repository](https://github.com/AlisiyaR/cybersecurity-lab-projects) |
+| [Worldwide Weather: Android app](https://alisiyar.github.io/weather.html) | Search for a city in a browser version of the app | [Repository](https://github.com/AlisiyaR/worldwide-weather-android) |
 
 ## How it is built
 
@@ -34,16 +34,19 @@ Every demo states on the page what is simulated.
 
 ```
 ├── index.html         # home page
-├── project.html       # project page, chosen by ?id=
+├── heido.html, ...    # one page per project, with its own title and share image
+├── project.html       # redirects old project links
+├── 404.html
 ├── css/style.css      # design and color palette
 ├── js/
 │   ├── content.js     # all site text, links and projects
 │   ├── site.js        # renders the pages
 │   ├── art.js         # line illustrations of the projects
+│   ├── teaser.js      # the email game on the home page
 │   ├── palette.js     # color editor (local preview only)
 │   └── edit.js        # text editor (local preview only)
 ├── demos/             # one folder per demo
-└── assets/            # CV and screenshots
+└── assets/            # CV, screenshots and share images
 ```
 
 ## Run locally

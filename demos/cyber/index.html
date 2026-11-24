@@ -30,6 +30,9 @@ body{background:var(--panel);padding:1.25rem}
 .sudo{color:#4fb0a0;text-decoration:underline}
 .cmd{color:#5aa2ff}
 .rule{display:inline-block;max-width:100%;overflow:hidden;white-space:pre;vertical-align:bottom}
+#quick{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;min-height:2.75rem;margin-top:.75rem;font-size:.9rem;color:var(--soft)}
+#quick button{min-width:2.75rem;font-family:"Fira Code",monospace;min-height:2.75rem;padding:.3rem 1rem;border:1px solid var(--edge);border-radius:99rem;background:var(--bg);color:var(--ink);font-weight:500}
+#quick button:hover{border-color:var(--acc);color:var(--acc)}
 #below{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;margin-top:.75rem}
 #note{flex:1 1 18rem;color:var(--soft);font-size:.9rem}
 #below button{border:1px solid var(--line);background:var(--bg);color:var(--ink)}
@@ -58,6 +61,7 @@ body{background:var(--panel);padding:1.25rem}
   <div id="out" role="log" tabindex="0"></div>
   <form id="line"><span id="ask"></span><input id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="200"></form>
 </div>
+<div id="quick" role="group"></div>
 <div id="below">
   <p id="note"></p>
   <button id="again" type="button"></button>
@@ -77,16 +81,17 @@ body{background:var(--panel);padding:1.25rem}
   const text = he ? {
     lead: "בחרו כלי, והוא יתחיל לרוץ במסוף. כשמופיעה שאלה, הקלידו תשובה ולחצו על Enter.",
     note: "הדמיה בלבד. לא נסרקת אף רשת, והנתונים פיקטיביים. ייתכנו טעויות או הבדלים לעומת הרצה אמיתית של הכלים.",
-    again: "הרצה מחדש", clear: "ניקוי המסך", tools: "בחירת כלי", input: "קלט למסוף", output: "פלט המסוף", star: "★ מומלץ להתחיל כאן",
+    quick: "תשובה מהירה:", again: "הרצה מחדש", clear: "ניקוי המסך", tools: "בחירת כלי", input: "קלט למסוף", output: "פלט המסוף", star: "★ מומלץ להתחיל כאן",
     checker: "הדמיית תקיפות ותיעוד ביומן", vulner: "סריקת רשת ומיפוי פגיעויות", ghostlogin: "בדיקת חשיפת SSH"
   } : {
     lead: "Choose a tool and it starts running in the terminal. When a question appears, type an answer and press Enter.",
     note: "Simulation only. No network is scanned, and the data is fictional. It may contain errors or differ from a real run of the tools.",
-    again: "Run again", clear: "Clear screen", tools: "Choose a tool", input: "Terminal input", output: "Terminal output", star: "★ Recommended first",
+    quick: "Quick answer:", again: "Run again", clear: "Clear screen", tools: "Choose a tool", input: "Terminal input", output: "Terminal output", star: "★ Recommended first",
     checker: "Attack simulation and logging", vulner: "Network scanning and vulnerability mapping", ghostlogin: "SSH exposure assessment"
   };
   for (const k of ["lead", "note", "again", "clear"]) $(k).textContent = text[k];
   $("tools").setAttribute("aria-label", text.tools);
+  $("quick").setAttribute("aria-label", text.quick);
   $("in").setAttribute("aria-label", text.input);
   $("out").setAttribute("aria-label", text.output);
 
@@ -121,18 +126,35 @@ body{background:var(--panel);padding:1.25rem}
       }
     };
   }
-  function ask(id, nodes) {
+  // תשובות אפשריות לפי השאלה, כדי שאפשר יהיה להתקדם בלי מקלדת
+  function answers(q, commands) {
+    if (commands) return commands;
+    if (/y\/n/.test(q)) return ["y", "n"];
+    if (/network range/.test(q)) return [LAB.vulner.localIp.replace(/\d+$/, "0") + "/24"];
+    if (/subnet mask/.test(q)) return ["24"];
+    if (/output directory/.test(q)) return ["lab_results"];
+    if (/to search/.test(q)) return ["tcp"];
+    if (/full path/.test(q)) return [LAB.vulner.customList];
+    const m = q.match(/(\d+)-(\d+)/);
+    return m ? Array.from({ length: m[2] - m[1] + 1 }, (_, i) => String(+m[1] + i)) : [];
+  }
+  function quick(list) {
+    $("quick").replaceChildren(...(list.length ? [span("", text.quick)] : []), ...list.map(v => Object.assign(document.createElement("button"), { type: "button", dir: "ltr", textContent: v, onclick: () => pending?.(v) })));
+  }
+  function ask(id, nodes, commands) {
     return new Promise((ok, stop) => {
       $("ask").replaceChildren(...nodes);
       $("in").value = "";
       $("line").hidden = false;
+      quick(tool ? answers(nodes.join(""), commands) : []);
       pending = value => {
+        quick([]);
         pending = null;
         $("line").hidden = true;
         id === run ? ok(value) : stop("stopped");
       };
       down();
-      if (tool) $("in").focus({ preventScroll: true });
+      if (tool && !matchMedia("(pointer:coarse)").matches) $("in").focus({ preventScroll: true });
     });
   }
   const top1 = () => [span("frame", "┌──("), span("who", `${LAB.user}㉿${place.host}`), span("frame", ")-["), span("path", place.path), span("frame", "]")];
@@ -143,10 +165,11 @@ body{background:var(--panel);padding:1.25rem}
     const id = ++run, t = terminal(id);
     pending = null;
     $("line").hidden = true;
+    quick([]);
     try {
       for (;;) {
         print(...top1());
-        const command = first || (await ask(id, top2())).trim();
+        const command = first || (await ask(id, top2(), Object.keys(TOOLS.commands(place)))).trim();
         first = null;
         print(...top2(), ...colored(command));
         const list = TOOLS.commands(place);
@@ -190,5 +213,6 @@ body{background:var(--panel);padding:1.25rem}
   shell();
 })();
 </script>
+<script src="../back.js" data-page="cybersecurity-lab.html"></script>
 </body>
 </html>

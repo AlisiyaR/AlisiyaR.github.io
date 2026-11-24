@@ -67,8 +67,8 @@
       localIp: "192.168.1.0", host: "192.168.1.227", lastOctet: 227,
       user: USER, password: "123456",
       // העיר והספק הוחלפו בערכי דוגמה, לשמירה על פרטיות
-      info: [`Username: ${USER}`, "OS version: Kali GNU/Linux Rolling", "Country: Israel", "City: Example City",
-        "System running for: up 4 hours, 18 minutes", "Service provider: Example ISP"]
+      info: [`Username: ${USER}`, "OS version: Kali GNU/Linux Rolling", "Country: Israel", "City: Tel Aviv",
+        "System running for: up 4 hours, 18 minutes", "Service provider: Bezeq"]
     }
   };
 })();

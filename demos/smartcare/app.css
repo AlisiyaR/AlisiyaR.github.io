@@ -8,6 +8,9 @@
 section{display:block;padding:0;border-top:0}
 body{background:var(--panel);padding:1.25rem}
 #lead{margin-bottom:1rem}
+#tour{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-bottom:1rem;font-size:.95rem}
+#tour button{min-height:2.75rem;padding:.3rem 1rem;border:1px solid var(--edge);border-radius:99rem;background:var(--bg);color:var(--ink);font-weight:500}
+#tour button:hover{border-color:var(--acc);color:var(--acc)}
 #note{margin-top:.75rem;color:var(--soft);font-size:.9rem}
 #app{display:flex;flex-direction:column;height:46rem;background:var(--w);color:var(--t);border:1px solid var(--b);border-radius:6px;overflow:hidden;font:400 .875rem/1.45 Inter,system-ui,sans-serif}
 #app button,#item button{color:inherit;padding:0;border-radius:3px;text-align:start;line-height:inherit}

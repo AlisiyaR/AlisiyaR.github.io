@@ -349,6 +349,12 @@
         $("tab" + state.tab).focus();
       } }, TABS.map(t => btn({ role: "tab", id: "tab" + t, "data-tab": t, "aria-controls": "view", onclick: () => go(t) }, icon(t), t)))),
     h("div", { id: "view", role: "tabpanel", tabindex: "-1" }));
+  // מסלול קצר: דרישה אחת, מהסיפור ועד הספרינט
+  $("tour").setAttribute("aria-label", he ? "מעקב אחרי דרישה אחת" : "Follow one story");
+  $("tour").append(h("strong", {}, he ? "מעקב אחרי דרישה אחת:" : "Follow one story:"), ...[
+    [he ? "1. הסיפור" : "1. The story", () => show("SMC-43")], [he ? "2. משימה" : "2. A task", () => show("SMC-44")], [he ? "3. תרחיש תקלה" : "3. A defect scenario", () => show("SMC-52")],
+    [he ? "4. הספרינט" : "4. Its sprint", () => { state.sprint = by["SMC-43"].sprint; state.group = ""; f = { ...none }; go("Board"); }]
+  ].map(([t, onclick]) => btn({ onclick }, t)));
   state.tab = TABS.find(t => "#" + t.toLowerCase() === location.hash) || "Board";
   render();
 })();

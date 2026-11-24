@@ -18,17 +18,27 @@
   pair("ראש העמוד", "name", "שם", S.name);
   pair("ראש העמוד", "headline", "כותרת מתחת לשם", S.headline);
   pair("ראש העמוד", "intro", "פתיח", S.intro);
+  for (const [k, l] of [["title", "כותרת"], ["lead", "הסבר"], ["hint", "רמז"], ["note", "הערה"], ["end", "סיום"]]) pair("משחקון הפתיח", `teaser.${k}`, l, S.teaser[k]);
+  S.teaser.items.forEach((s, i) => pair("משחקון הפתיח", `teaser.${i}.note`, `הסבר למייל ${i + 1}`, s.note));
   for (const p of S.projects) {
     const g = "פרויקט: " + p.title.he;
     pair(g, `projects.${p.id}.title`, "שם", p.title);
     pair(g, `projects.${p.id}.summary`, "תיאור קצר", p.summary);
-    pair(g, `projects.${p.id}.details`, "הסבר (שורה ריקה בין פסקאות)", p.details);
+    pair(g, `projects.${p.id}.shows`, "מה זה מראה", p.shows);
+    pair(g, `projects.${p.id}.result`, "תוצאה", p.result);
+    const c = p.case, at = `projects.${p.id}.case.`;
+    for (const [k, l] of [["type", "סוג"], ["role", "תפקיד"], ["when", "מתי"], ["lookLabel", "כותרת השורה מעל הדמו"], ["look", "השורה מעל הדמו"], ["problem", "הבעיה"], ["goal", "המטרה"], ["did", "מה עשיתי (שורה ריקה בין פסקאות)"], ["tested", "איך בדקתי"], ["limits", "מגבלות (שורה ריקה בין סעיפים)"]]) if (c[k]) pair(g, at + k, l, c[k]);
+    c.decisions.forEach((d, i) => { for (const [k, l] of [["title", "כותרת"], ["instead", "במקום"], ["why", "למה"]]) if (d[k]) pair(g, `${at}decisions.${i}.${k}`, `החלטה ${i + 1}: ${l}`, d[k]); });
+    (c.trace || []).forEach((s, i) => s.forEach((x, j) => pair(g, `${at}trace.${i}.${j}`, `שלב ${i + 1}${j ? ": פירוט" : ""}`, x)));
+    if (c.runs) pair(g, at + "runs.note", "הערה לתרשים", c.runs.note);
   }
   pair("עליי", "about", "טקסט (שורה ריקה בין פסקאות)", S.about);
   S.how.forEach((s, i) => {
     pair("איך אני עובדת", `how.${i}.label`, `נקודה ${i + 1}`, s.label);
     pair("איך אני עובדת", `how.${i}.text`, `פירוט ${i + 1}`, s.text);
   });
+  pair("כישורים", "proofNote", "הערה מעל הרשימה", S.proofNote);
+  S.site.forEach((s, i) => { pair("איך האתר נבנה", `site.${i}.label`, `נושא ${i + 1}`, s.label); pair("איך האתר נבנה", `site.${i}.text`, `פירוט ${i + 1}`, s.text); });
   S.skills.forEach((s, i) => {
     pair("כישורים", `skills.${i}.label`, `נושא ${i + 1}`, s.label);
     flat("כישורים", `skills.${i}.items`, `פירוט ${i + 1}`, s, "items");
@@ -38,7 +48,7 @@
     pair(g, `${k}.${i}.what`, `${what} ${i + 1}`, s.what);
     if (s.note) pair(g, `${k}.${i}.note`, `פירוט ${i + 1}`, s.note);
   });
-  const NAMES = { projects: "כותרת: פרויקטים", about: "כותרת: עליי", how: "כותרת: איך אני עובדת", skills: "כותרת: כישורים", edu: "כותרת: השכלה", exp: "כותרת: ניסיון", contact: "כותרת: יצירת קשר", cv: "כפתור: קורות חיים", try: "כפתור: דמו", back: "קישור: חזרה", full: "קישור: חלון מלא", demo: "כותרת: דמו" };
+  const NAMES = { projects: "כותרת: פרויקטים", about: "כותרת: עליי", how: "כותרת: איך אני עובדת", skills: "כותרת: כישורים", edu: "כותרת: השכלה", exp: "כותרת: ניסיון", contact: "כותרת: יצירת קשר", cv: "כפתור: קורות חיים", see: "כפתור: לפרויקטים", try: "כפתור: דמו", back: "קישור: חזרה", full: "קישור: חלון מלא", demo: "כותרת: דמו" };
   for (const k in NAMES) add("כותרות וכפתורים", `ui.${k}`, NAMES[k], () => ({ he: UI.he[k], en: UI.en[k] }), (l, v) => { UI[l][k] = v; });
 
   // שינויים שמורים. אם הטקסט בקובץ כבר התעדכן, השינוי הישן נזרק.

@@ -11,7 +11,7 @@
     lead: "בחרו מייל מוכן ושלחו אותו כלקוח. כמה שניות אחר כך המשימה תופיע בלוח של צוות התמיכה.",
     cTitle: "מסך הלקוח", cSub: "תיבת המייל", tTitle: "מסך צוות התמיכה", tSub: "לוח העבודה של העובדים", fTitle: "מאחורי הקלעים",
     ready: "מוכנים לשליחה", inbox: "דואר נכנס", from: "מאת", to: "אל", subject: "נושא", send: "שליחה", sending: "נשלח...", sent: "נשלח",
-    noInbox: "אין עדיין תשובות. שלחו מייל כדי לקבל אישור.", got: "המייל נשלח, והתקבל אישור בדואר הנכנס.", on: "המייל נשלח.", wait: "מייל אחר נשלח כרגע.", see: "למשימה בלוח", read: "לאישור שהתקבל", back: "חזרה לרשימה", translated: "תורגם מעברית",
+    noInbox: "אין עדיין תשובות. שלחו מייל כדי לקבל אישור.", got: "המייל נשלח, והתקבל אישור בדואר הנכנס.", on: "המייל נשלח.", wait: "מייל אחר נשלח כרגע.", result: "מה המערכת החליטה", cat: "קטגוריה", pri: "עדיפות", who: "עובד", missed: "ה-AI טעה. הצפוי: ", see: "למשימה בלוח", read: "לאישור שהתקבל", back: "חזרה לרשימה", translated: "תורגם מעברית",
     steps: ["קריאת המייל", "נושא ותוכן בלבד ל-AI", "תשובת Gemini", "כלל קבוע בוחר עובד", "משימה בלוח", "אישור ללקוח"], idle: "שלחו מייל כדי לראות את השלבים.",
     kept: "כתובת השולח לא נשלחת ל-AI.", arrow: " ← ", added: "משימה חדשה בלוח: ", conf: "נשלח ללקוח מספר פנייה ",
     note: "הדמיה, ואינה מוצר של monday.com. Heido היא חברה בדויה, וכל השמות והכתובות בדויים. תשובות ה-AI הן הפלט ש-Gemini החזיר בבדיקות, והן לא מחושבות מחדש; שתיים מהן שגויות ונשארו כמו שהיו (System failure recurring issue ו-Customer Callback Request). שום מייל לא נשלח באמת, והלוח מתאפס ברענון."
@@ -19,7 +19,7 @@
     lead: "Choose a ready-made email and send it as a customer. A few seconds later the task appears on the support team's board.",
     cTitle: "Customer screen", cSub: "Mailbox", tTitle: "Support team screen", tSub: "The employees' work board", fTitle: "Behind the scenes",
     ready: "Ready to send", inbox: "Inbox", from: "From", to: "To", subject: "Subject", send: "Send", sending: "Sending...", sent: "Sent",
-    noInbox: "No replies yet. Send an email to get a confirmation.", got: "The email was sent, and a confirmation arrived in the inbox.", on: "The email was sent.", wait: "Another email is being sent.", see: "See the task", read: "Read the confirmation", back: "Back to list", translated: "Translated from Hebrew",
+    noInbox: "No replies yet. Send an email to get a confirmation.", got: "The email was sent, and a confirmation arrived in the inbox.", on: "The email was sent.", wait: "Another email is being sent.", result: "What the system decided", cat: "Category", pri: "Priority", who: "Employee", missed: "The AI got it wrong. Expected: ", see: "See the task", read: "Read the confirmation", back: "Back to list", translated: "Translated from Hebrew",
     steps: ["Read the email", "Only subject and body to the AI", "Gemini's answer", "A fixed rule picks the employee", "Task on the board", "Confirm to the customer"], idle: "Send an email to see the steps.",
     kept: "The sender's address is not sent to the AI.", arrow: " → ", added: "New task on the board: ", conf: "The customer received ticket number ",
     note: "Simulation, not a monday.com product. Heido is a fictional company, and all names and addresses are fictional. The AI answers are what Gemini returned in testing and are not recomputed; two of them are wrong and were kept as they were (System failure recurring issue and Customer Callback Request). No email is really sent, and the board resets on refresh."
@@ -44,21 +44,29 @@
 
   /* ---------- מסך הלקוח ---------- */
   const tasks = H.board.map(t => ({ ...t })), status = {}; // status[id]: "sending" | "task" | "done"
-  let reading = false, folder = "ready", mail = H.emails[0], reply = null, busy = false, inbox = [];
+  // בדיקות של מקרי קצה (test-data במאגר)
+  const PICKS = { T12: ["ניסיון Prompt Injection", "Prompt injection attempt"], T13: ["ניסוח דחוף מטעה", "Misleading urgency"], T04: ["דחיפות מוצדקת", "Justified urgency"], T10: ["מייל ללא פרטים", "Email with no details"] };
+  const EXPECTED = { T10: "Other / Unclassified" };
+  const first = Object.keys(PICKS).map(id => H.emails.find(e => e.id === id));
+  const ordered = [...first, ...H.emails.filter(e => !PICKS[e.id])];
+  let reading = false, folder = "ready", mail = first[0], reply = null, busy = false, inbox = [];
 
   function drawList() {
-    const top = $("list").scrollTop, own = folder === "ready" ? H.emails : inbox, cur = folder === "ready" ? mail : reply;
+    const top = $("list").scrollTop, own = folder === "ready" ? ordered : inbox, cur = folder === "ready" ? mail : reply;
     $("folders").replaceChildren(...[["ready", `${T.ready} (${H.emails.filter(e => !status[e.id]).length})`], ["inbox", `${T.inbox} (${inbox.length})`]].map(([k, label]) =>
       btn({ "aria-pressed": String(folder === k), "data-f": k, onclick: () => { open(k); $("folders").querySelector(`[data-f=${k}]`).focus(); } }, label)));
     $("list").replaceChildren(...(own.length ? own.map(e => h("li", {}, btn({ "aria-current": String(e === cur), "data-id": e.id, onclick: () => { folder === "ready" ? mail = e : reply = e; reading = true; draw(); $("pane").scrollTop = 0; (narrow.matches ? $("pane") : $("list").querySelector(`[data-id=${e.id}]`)).focus({ preventScroll: true }); } },
       h("b", {}, folder === "ready" ? en(e.name) : en("Heido Support")), folder === "ready" && status[e.id] ? h("span", { class: "sent" }, "✓ " + T.sent) : "",
-      h("span", { class: "subj", dir: "ltr" }, folder === "ready" ? e.subject : `We received your request – Ticket ${e.item}`)))) : [h("li", { class: "none" }, T.noInbox)]));
+      h("span", { class: "subj", dir: "ltr" }, folder === "ready" ? e.subject : `We received your request – Ticket ${e.item}`), folder === "ready" && PICKS[e.id] ? h("span", { class: "pick" }, PICKS[e.id][he ? 0 : 1]) : null))) : [h("li", { class: "none" }, T.noInbox)]));
     $("list").scrollTop = top;
   }
   // בטלפון רואים או את הרשימה או את המייל
   const narrow = matchMedia("(max-width:44rem)");
   const back = () => btn({ class: "back", onclick: () => { reading = false; draw(); $("list").querySelector("[aria-current=true]")?.focus({ preventScroll: true }); } }, T.back);
   const head = rows => h("div", { class: "hd" }, rows.map(([a, b]) => [h("span", {}, a), en(b)]));
+  // התוצאה ליד המייל, בלי לגלול ללוח
+  const decided = e => h("div", { class: "decided" }, h("strong", {}, T.result), h("dl", {}, [[T.cat, e.category], [T.pri, e.priority], [T.who, assign(e.category)]].map(([a, b]) => h("div", {}, h("dt", {}, a), h("dd", {}, en(b))))),
+    EXPECTED[e.id] ? h("p", {}, T.missed, en(EXPECTED[e.id])) : null);
   function drawPane() {
     const pane = $("pane");
     if (folder === "inbox") {
@@ -71,7 +79,7 @@
     const act = !s ? [btn({ class: "btn main", disabled: busy ? "" : null, onclick: () => send(mail) }, T.send), busy ? h("p", {}, T.wait) : null]
       : s === "sending" ? [btn({ class: "btn main", disabled: "" }, T.sending)]
       : [h("p", {}, s === "done" ? T.got : T.on), btn({ class: "btn", onclick: () => seeTask(mail.id) }, T.see), s === "done" ? btn({ class: "btn", onclick: () => { reply = inbox.find(x => x.id === mail.id); open("inbox"); reading = true; draw(); pane.scrollTop = 0; if (narrow.matches) $("customer").scrollIntoView(); pane.focus({ preventScroll: true }); } }, T.read) : null];
-    pane.replaceChildren(back(), h("div", { class: "mbody" }, h("div", { class: "subject", dir: "ltr", lang: "en" }, mail.subject), head([[T.from, `${mail.name} (${mail.email})`], [T.to, "Heido Support"]]),
+    pane.replaceChildren(back(), h("div", { class: "mbody" }, s === "task" || s === "done" ? decided(mail) : "", h("div", { class: "subject", dir: "ltr", lang: "en" }, mail.subject), head([[T.from, `${mail.name} (${mail.email})`], [T.to, "Heido Support"]]),
       h("div", { class: "text", dir: "ltr", lang: "en" }, mail.body), mail.translated ? h("p", { class: "tr" }, T.translated) : ""), h("div", { class: "act" }, act.filter(Boolean)));
   }
   function open(f) {
